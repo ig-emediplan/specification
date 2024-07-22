@@ -37,6 +37,15 @@ Medication plans are a central pillar of any eHealth solution. To enable interop
 
 This paper describes the currently proposed specification and reference implementation of the object model for a medication plan, the so-called CHMED16R.
 
+> [!IMPORTANT]
+> CHMED16R is based on CHMED16A and only adds the new entities HealthcarePerson and HealthcareOrganization.
+> This is required for the prescription document (Rx) to conform with the law.
+> Therefore, CHMED16R is only relevant when working with Rx documents
+> (therefore also the version "R" for Rx).
+> Due to this, the parts of the specification
+> which are not impacting the Rx document directly (e.g. the paper-based layout)
+> are not adjusted to include the new information.
+
 The reference consists of two major parts: 
 
 - the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16R1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 (see [ChTransmissionFormat](../chtransmissionformat/README.md)).
@@ -72,6 +81,8 @@ The hierarchy of the object model is quite simple. Each medication object includ
   n Medicaments (all currently used medicaments)
     n Posology (the dosage information)
       n Taking times (the intake timetable)
+  1 HealthcarePerson
+  1 HealthcareOrganization
 ```
 
 ### Using JSON as the object model format
@@ -147,6 +158,8 @@ classDiagram
         -Rmk[0..1]: string
         -ValBy[0..1]: string
         -ValDt[0..1]: string
+        -HcOrg[0..1]: HealthcareOrganization
+        -HcPerson[0..1]: HealthcarePerson
     }
 
     class Medicament {
@@ -189,6 +202,23 @@ classDiagram
         -MA[0..1]: double
     }
 
+    class HealthcarePerson {
+        Gln[0..1]: string
+        FName[1]: string
+        LName[1]: string
+        Zsr[0..1]: string
+    }
+
+    class HealthcareOrganization {
+        Gln[1]: string
+        Name[1]: string
+        Street[1]: string
+        Zip[1]: string
+        City[1]: string
+        Country[0..1]: string
+        Zsr[0..1]: string
+    }
+
     Patient "1" -- "0..*" PatientId
     Patient "1" -- "0..*" MedicalData
     Patient "1" -- "0..*" PrivateField
@@ -196,6 +226,8 @@ classDiagram
     MedicalData "1" -- "0..*" Measurement
     MedicalData "1" -- "0..*" PrivateField
     Medication "1" -- "1" Patient
+    Medication "1" -- "0..1" HealthcarePerson
+    Medication "1" -- "0..1" HealthcareOrganization
     Medication "1" -- "0..*" Medicament
     Medication "1" -- "0..*" Recommendation
     Medication "1" -- "0..*" PrivateField
@@ -333,6 +365,10 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   The patient can also be the author of the eMediplan. In this case, the minimum requirement is that the term
   "patient" is used to designate the author. Optionally, the patient's first name, last name and date of birth can also be specified additionally.
 
+  Note that the GLN provided in this field should also be provided
+  in [HealthcarePerson](#healthcareperson) or [HealthcareOrganization](#healthcareorganization) respectively.
+  This is a duplication of data which allows systems only supporting CHMED16A to support CHMED16R at least to some degree.
+
   </td>
 </tr>
 <tr>
@@ -390,6 +426,34 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>
 
   Validate date: Date of validation, Format: yyyy-mm-ddThh:mm:ss+02:00 ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Combined date and time in UTC)
+
+  </td>
+</tr>
+<tr>
+  <td>HcPerson</td>
+  <td><i>HealthcarePerson</i></td>
+  <td>O</td>
+  <td>O</td>
+  <td>R</td>
+  <td>
+
+  The healthcare person (the author of the document)
+
+  Please refer to [HealthcarePerson](#healthcareperson).
+
+  </td>
+</tr>
+<tr>
+  <td>HcOrg</td>
+  <td><i>HealthcareOrganization</i></td>
+  <td>O</td>
+  <td>O</td>
+  <td>R</td>
+  <td>
+
+  The healthcare organization in which the <i>HealthcarePerson</i> works.
+
+  Please refer to [HealthcareOrganization](#healthcareorganization).
 
   </td>
 </tr>
@@ -1310,7 +1374,6 @@ Applies only to PolymedicationCheck.
 </tr>
 </table>
 
-
 #### Private Field
 
 <table>
@@ -1352,6 +1415,141 @@ Applies only to PolymedicationCheck.
   <td>0-N</td>
   <td>0-N</td>
   <td>The list of private fields</td>
+</tr>
+</table>
+
+#### HealthcarePerson
+
+<table>
+<tr>
+  <th rowspan="2"><b>Name</b></th>
+  <th rowspan="2"><b>Type</b></th>
+  <th colspan="3"><b>Usage</b></th>
+  <th rowspan="2"><b>Description</b></th>
+</tr>
+<tr>
+  <td>MP</td>
+  <td>PMC</td>
+  <td>Rx</td>
+</tr>
+<tr>
+  <td>Gln</td>
+  <td>string</td>
+  <td>O</td>
+  <td>O</td>
+  <td>R</td>
+  <td>The GLN</td>
+</tr>
+<tr>
+  <td>FName</td>
+  <td>string</td>
+  <td>R</td>
+  <td>R</td>
+  <td>R</td>
+  <td>First name</td>
+</tr>
+<tr>
+  <td>LName</td>
+  <td>string</td>
+  <td>R</td>
+  <td>R</td>
+  <td>R</td>
+  <td>Last name</td>
+</tr>
+<tr>
+  <td>Zsr</td>
+  <td>string</td>
+  <td>-</td>
+  <td>-</td>
+  <td>O</td>
+  <td><p>ZSR number</p>
+    <p>The ZSR number may only be set once, either in object <i>HealthcarePerson</i> or in object <i>HealthcareOrganization</i>.
+    </p></td>
+</tr>
+</table>
+
+#### HealthcareOrganization
+
+<table>
+<tr>
+  <th rowspan="2"><b>Name</b></th>
+  <th rowspan="2"><b>Type</b></th>
+  <th colspan="3"><b>Usage</b></th>
+  <th rowspan="2"><b>Description</b></th>
+</tr>
+<tr>
+  <td>MP</td>
+  <td>PMC</td>
+  <td>Rx</td>
+</tr>
+<tr>
+  <td>Gln</td>
+  <td>string</td>
+  <td>R/O*</td>
+  <td>R/O*</td>
+  <td>-</td>
+  <td><p>The GLN</p>
+    <p>* R if no GLN is set in object HealthcarePerson, otherwise O</p></td>
+</tr>
+<tr>
+  <td>Name</td>
+  <td>string</td>
+  <td>R</td>
+  <td>R</td>
+  <td>R</td>
+  <td>Name</td>
+</tr>
+<tr>
+  <td>Street</td>
+  <td>string</td>
+  <td>R</td>
+  <td>R</td>
+  <td>R</td>
+  <td>Street</td>
+</tr>
+<tr>
+  <td>Zip</td>
+  <td>string</td>
+  <td>R</td>
+  <td>R</td>
+  <td>R</td>
+  <td>Postcode</td>
+</tr>
+<tr>
+  <td>City</td>
+  <td>string</td>
+  <td>R</td>
+  <td>R</td>
+  <td>R</td>
+  <td>City</td>
+</tr>
+<tr>
+  <td>Country</td>
+  <td>string</td>
+  <td>O</td>
+  <td>O</td>
+  <td>O</td>
+  <td>
+
+  Country
+
+  If the address is in Switzerland, this property does not need to be set, as it is assumed by default that the address is in Switzerland.
+
+  Format: Alpha-2 code ([ISO 3166](https://www.iso.org/iso-3166-country-codes.html) Country Codes)
+
+  (e.g. FR for France)
+
+  </td>
+</tr>
+<tr>
+  <td>Zsr</td>
+  <td>string</td>
+  <td>-</td>
+  <td>-</td>
+  <td>O</td>
+  <td><p>ZSR number</p>
+    <p>The ZSR number may only be set once, either in object <i>HealthcarePerson</i> or in object <i>HealthcareOrganization</i>.
+    </p></td>
 </tr>
 </table>
 
