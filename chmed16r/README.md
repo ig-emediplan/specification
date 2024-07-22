@@ -1,4 +1,4 @@
-# eMedication Plan CHMED16A
+# eMedication Plan CHMED16R
 
 **Contact**
 
@@ -12,8 +12,8 @@ info@emediplan.ch
 
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
-- [CHMED16A eMedication object](#chmed16a-emedication-object)
-    - [Overview of the object model](#chmed16a-emedication-object)
+- [CHMED16R eMedication object](#chmed16r-emedication-object)
+    - [Overview of the object model](#chmed16r-emedication-object)
     - [Using JSON as the object model format](#using-json-as-the-object-model-format)
     - [Object model](#object-model)
     - [Example of a JSON medication object](#example-of-a-json-medication-object)
@@ -35,19 +35,19 @@ info@emediplan.ch
 
 Medication plans are a central pillar of any eHealth solution. To enable interoperability between eHealth systems in Switzerland, the organisation "[IG eMediplan](https://emediplan.ch/)" was founded in 2016. Its aim is to support and provide public, open source, medication plan formats used by a broad group of stakeholders from the public and private sectors. 
 
-This paper describes the currently proposed specification and reference implementation of the object model for a medication plan, the so-called CHMED16A.
+This paper describes the currently proposed specification and reference implementation of the object model for a medication plan, the so-called CHMED16R.
 
 The reference consists of two major parts: 
 
-- the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16A1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 (see [ChTransmissionFormat](../chtransmissionformat/README.md)).
+- the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16R1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 (see [ChTransmissionFormat](../chtransmissionformat/README.md)).
 - the content and layout specification for a paper-based layout used in print/PDF scenarios 
 
 This allows IT systems to store and transmit electronic medication plans as simple strings or text files in UTF-8. It also makes it possible to transmit the medication in a print-based form by using 2D barcodes. Therefore, the medication plan is readable by users and systems alike. This is necessary to guarantee a simple handling. 
 
-A typical CHMED16A object would look like this: 
+A typical CHMED16R object would look like this: 
 
 ```
-CHMED16A1H4sIAAAAAAAEAMVU3W7TMBR+lcq3S4SPHdtx7raVAaKFqutAAnoREreJ2jpT4gKj6ptxx4txnCwVSKQSu0GVqvPX7+fIpwdyuXcFSYiSFCjloGKtNQnI2GGRUZAh1SGwBUASyYTqC8oSSnHgVe4HZM7z1UqF6WcqwkhxjCKdhcJkWc650GIlcXZq8sXDvSEJtHGZpTtjXUOSj4cORyuIpWpRu0EekFnVDYzxmwbtZ+l13dTV7g9t5Ij1eZVicfYWMRab9byxmF1urMH8zpbezO3iNTkGj4RRJIHH7Bwj/J2RhUAHGa+2e/fF1PnPH9bu7XqAnHEhZHzGrqeGJ5EXVVbk9T7bfHr20tTfBwRAxCQHen7f/y7guqi2pnGmLm1j7MbUA/Qx1VLz8/aftvvf7L9Pm2ZQAQgBTEX/QwL+dJa6Et8/SQ7kqr0z0DGEFPxbDsh16R48lqktZjdv8FYwnabfyl2KhRfG5giasIBMTj3nWp4JPrmEjJ93J+fxx5PGTY3X1tbSzuHpGDthCPUu3eKM4O2Kujbr29C3QcSd9ex0udibYyKUWvbLZX3Au54EdupFfSD6QD4CCBEIBcsjjpJZUVnv6yJCxlEsYMRk+59z62pj/MLuLBreoe2vZj2KsfOhvMcyp0yhAzLfbbzj4y8tzloh3gQAAA==
+CHMED16R1H4sIAAAAAAAEAMVU3W7TMBR+lcq3S4SPHdtx7raVAaKFqutAAnoREreJ2jpT4gKj6ptxx4txnCwVSKQSu0GVqvPX7+fIpwdyuXcFSYiSFCjloGKtNQnI2GGRUZAh1SGwBUASyYTqC8oSSnHgVe4HZM7z1UqF6WcqwkhxjCKdhcJkWc650GIlcXZq8sXDvSEJtHGZpTtjXUOSj4cORyuIpWpRu0EekFnVDYzxmwbtZ+l13dTV7g9t5Ij1eZVicfYWMRab9byxmF1urMH8zpbezO3iNTkGj4RRJIHH7Bwj/J2RhUAHGa+2e/fF1PnPH9bu7XqAnHEhZHzGrqeGJ5EXVVbk9T7bfHr20tTfBwRAxCQHen7f/y7guqi2pnGmLm1j7MbUA/Qx1VLz8/aftvvf7L9Pm2ZQAQgBTEX/QwL+dJa6Et8/SQ7kqr0z0DGEFPxbDsh16R48lqktZjdv8FYwnabfyl2KhRfG5giasIBMTj3nWp4JPrmEjJ93J+fxx5PGTY3X1tbSzuHpGDthCPUu3eKM4O2Kujbr29C3QcSd9ex0udibYyKUWvbLZX3Au54EdupFfSD6QD4CCBEIBcsjjpJZUVnv6yJCxlEsYMRk+59z62pj/MLuLBreoe2vZj2KsfOhvMcyp0yhAzLfbbzj4y8tzloh3gQAAA==
 ```
 
 In addition, the layout specification for printer-based eMediplans facilitates the quick and secure reading of medication plans. This benefits healthcare professionals and patients. The documents are available in a uniform layout, independently of the individual IT systems.
@@ -56,7 +56,7 @@ In addition, the layout specification for printer-based eMediplans facilitates t
 
 eMediplan example 
 
-## CHMED16A eMedication object
+## CHMED16R eMedication object
 
 ### Overview of the object model
 
@@ -1536,20 +1536,20 @@ Applies only to PolymedicationCheck.
 ### Encapsulation of the JSON medication object
 
 To encapsulate and transmit the JSON object, [ChTransmissionFormat](../chtransmissionformat/README.md) should be used.
-Note that CHMED16A (the JSON described in this specification) does not contain a version marker
+Note that CHMED16R (the JSON described in this specification) does not contain a version marker
 which is only included in ChTransmissionFormat
 as one of the main goals is to keep the content as compact as possible.
-Therefore, if CHMED16A is transmitted without being wrapped in ChTransmissionFormat,
+Therefore, if CHMED16R is transmitted without being wrapped in ChTransmissionFormat,
 the version needs to be transferred in another way.
 
 ### In software: the shared libraries
 
-The ["IG eMediplan" website](https://emediplan.ch/downloads/) provides a free DLL that can be used in Windows-based software projects. In addition, the full source code of the library (written in C#) is available on request. This software speeds up the mapping from a customer implementation to the JSON object. Just include it in your software project and then add it as a reference (Ch.Emediplan.ChMed16A).
+The ["IG eMediplan" website](https://emediplan.ch/downloads/) provides a free DLL that can be used in Windows-based software projects. In addition, the full source code of the library (written in C#) is available on request. This software speeds up the mapping from a customer implementation to the JSON object. Just include it in your software project and then add it as a reference (Ch.Emediplan.ChMed16R).
 
 #### How to deserialize an existing CHMED string
 
 ```cs
-var chmedString = "CHMED16A1....";
+var chmedString = "CHMED16R1....";
 var medication = Ch.Emediplan.ChMed16A.Serializer.ReadObject(chmedString);
 ```
 
@@ -1700,7 +1700,7 @@ The service provider block is located next to the patient block (to the right) a
 
 #### Logo service provider or organisation
 
-|**Name**  |**Description** |**Characteristics** |**CHMED16A** |**Field** |
+|**Name**  |**Description** |**Characteristics** |**CHMED16R** |**Field** |
 | - | - | - | - | - |
 |**Logo** |Logo of the service provider or the organisation |300dpi.jpg<br>Height 0.26 cm<br>Width 2.36 cm<br>**Printed as:**<br>Created by: |||
 
@@ -1708,7 +1708,7 @@ The service provider block is located next to the patient block (to the right) a
 
 There are no instructions concerning depiction or content.
 
-|**Name**  |**Description** |**Characteristics** |**CHMED16A** |**Field** |
+|**Name**  |**Description** |**Characteristics** |**CHMED16R** |**Field** |
 | - | - | - | - | - |
 |**Printed by** |Details of either the eMediplan creator or the person/organisation that last edited the eMediplan. |Arial 8.5 pt |||
 
@@ -1724,7 +1724,7 @@ The medication block is vertically arranged in columns or horizontally in medica
 
 The height and width of the columns are defined by the content. In the following table the sequence and the column titles are defined:
 
-|**Name**  |**Description** |**Characteristics** |**CHMED16A** |**Field** |
+|**Name**  |**Description** |**Characteristics** |**CHMED16R** |**Field** |
 | - | - | - | - | - |
 |**Medication** |<p>Drug description including picture </p><p>Alternatively, a medicament can be displayed as free text, but without a picture. </p>|The order of the medicaments is not predetermined and is left to the discretion of the eMediplan creator. |[Medicament](#medicament)|IdType |
 |**Morning (08:00) Noon (12:00) Evening (18:00) Night (22:00)** |Dosing schedule, the time of ingestion/application |<p>**Numbers for divisibility:** </p><p>½, 1/3, ¼, 2/3, ¾, 1/8 </p><p>**Special dosage (alternative to the "morning-noon- evening-night dosing schedule) printed as:** </p><p>See instructions </p>|[Medicament](#medicament)|Pos |
@@ -1740,7 +1740,7 @@ The height and width of the columns are defined by the content. In the following
 
 Below the identification block and above the medication block, the date and time of the creation or modification of the eMediplan are shown in the formats DD.MM.YYYY and hh:mm.
 
-|**Name**  |**Description** |**Characteristics** |**CHMED16A** |**Field** |
+|**Name**  |**Description** |**Characteristics** |**CHMED16R** |**Field** |
 | - | - | - | - | - |
 |**Issue date** |Date and time of creation or modification of the eMediplan |Arial 8.5 pt<br>**Printed as:**<br>Issue date: |[Medication](#medication-med)|Dt |
 
@@ -1748,7 +1748,7 @@ Below the identification block and above the medication block, the date and time
 
 The comment block is only shown below the medication block if content is available. This block has a width of about 28 cm, the height varies depending on the content. This block is meant for advice that the service provider would like to share with the patient independently of the medication.
 
-|**Name**  |**Description** |**Characteristics** |**CHMED16A** |**Field** |
+|**Name**  |**Description** |**Characteristics** |**CHMED16R** |**Field** |
 | - | - | - | - | - |
 |**Remark** |Remark box|Arial 8.5 pt |[Medication](#medication-med)|Rmk |
 
@@ -1756,7 +1756,7 @@ The comment block is only shown below the medication block if content is availab
 
 The footer is composed of the following parts: on the left-hand side the patient's first name, last name and birth date, in the middle the software provider with the annotation "by" followed by the version in parentheses and on the right-hand side the number of pages (current page number and total page number, e.g. page 1 of 3).
 
-|**Name**  |**Description** |**Characteristics** |**CHMED16A** |**Field** |
+|**Name**  |**Description** |**Characteristics** |**CHMED16R** |**Field** |
 | - | - | - | - | - |
 |**-** |Footer |Arial 8.5 pt Page 1 of n |||
 
