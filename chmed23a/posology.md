@@ -52,7 +52,7 @@ info@emediplan.ch
 
 ## Introduction
 
-This document is an addition to the specification "eMediplan\_ChMed23A". It focuses on the topic of posology and describes how to use the *PosologyDetail* objects and its dependencies (*TimedDosage* objects, *Dosage* objects, *Sequence* objects and *Application* objects).
+This document is an addition to the main specification of [CHMED23A](./README.md). It focuses on the topic of posology and describes how to use the *PosologyDetail* objects and its dependencies (*TimedDosage* objects, *Dosage* objects, *Sequence* objects and *Application* objects).
 
 ## Conventions
 
@@ -1971,6 +1971,6 @@ Specifies the available time units.
 |Year |7 |
 
 
-[^1]: MP: MedicationPlan corresponds to medType: 1 of the Medication object (see specification document "eMediplan_ChMed23A")
-[^2]: Rx: Prescription corresponds to medType: 2 of the Medication object (see specification document "eMediplan_ChMed23A")
+[^1]: MP: MedicationPlan corresponds to `medType: 1` of the Medication object (see [CHMED23A](./README.md))
+[^2]: Rx: Prescription corresponds to `medType: 2` of the Medication object (see [CHMED23A](./README.md))
 [^3]: EDQM: European Directorate for the Quality of Medicines & HealthCare

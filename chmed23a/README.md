@@ -44,7 +44,7 @@ This paper describes the specification and reference implementation of the objec
 
 The reference consists of the content and layout specification for the electronic document, a JSON file containing a medication.
 
-The content and layout specification for a paper-based layout used in Print/PDF scenarios is described in the document "eMediplan\_Paper-based\_Layout".
+The content and layout specification for a paper-based layout used in Print/PDF scenarios is described in this [document](./paper-based-layout.md).
 
 A ChMed23A can be transmitted using the so called ChTransmissionFormat[^1], which specifies the type of the content and includes the compressed and Base64 encoded content.
 
@@ -995,7 +995,7 @@ The *Medicament* object contains information about a medicament as well as its p
 
 A posology describes when and what amount of a medicament must be taken.
 
-The table below describes the properties of a posology. Please refer to the document "eMediplan\_ChMed23A\_Posology" for additional information about creating posologies.
+The table below describes the properties of a posology. Please refer to the [posology specification](./posology.md) for additional information about creating posologies.
 
 <table>
 <tr>
@@ -1053,7 +1053,7 @@ The table below describes the properties of a posology. Please refer to the docu
   <td>R</td>
   <td>R</td>
   <td><p>The <i>PosologyDetail</i> object contains the details of the posology.</p>
-    <p>Please refer to the document "eMediplan_ChMed23A_Posology" for additional information.</p></td>
+    <p>Please refer to the [posology specification](./posology.md) for additional information.</p></td>
 </tr>
 <tr>
   <td>relMeal</td>
@@ -1090,7 +1090,7 @@ The table below describes the properties of a posology. Please refer to the docu
     water or fruit juice).</p>
     <p>Please note: For unstructured posology we recommend using the <i>Posology</i> object <i>FreeText</i> instead of
       <i>AppInstr</i>. </p>
-    <p>Please refer to the document "eMediplan_ChMed23A_Posology".</p></td>
+    <p>Please refer to the [posology specification](./posology.md).</p></td>
 </tr>
 <tr>
   <td>roa</td>
