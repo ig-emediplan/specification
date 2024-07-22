@@ -63,15 +63,15 @@ eMediplan example
 The hierarchy of the object model is quite simple. Each medication object includes:
 
 ```
-1 Patient
-  n Identifiers (a number of identifiers/numbers/codes to connect the patient to IT systems)
-  1 Medical status (a description of the patient's medical situation)
-    n Risks (all the risks of the patient's medical situation, based on public risk lists)
-    n Measurements (measurements of the patient's medical status)
-  1 Medication (the current medication plan)
-    n Medicaments (all currently used medicaments)
-      n Posology (the dosage information)
-        n Taking times (the intake timetable)
+1 Medication (the current medication plan)
+  1 Patient
+    n Identifiers (a number of identifiers/numbers/codes to connect the patient to IT systems)
+    1 Medical status (a description of the patient's medical situation)
+      n Risks (all the risks of the patient's medical situation, based on public risk lists)
+      n Measurements (measurements of the patient's medical status)
+  n Medicaments (all currently used medicaments)
+    n Posology (the dosage information)
+      n Taking times (the intake timetable)
 ```
 
 ### Using JSON as the object model format
