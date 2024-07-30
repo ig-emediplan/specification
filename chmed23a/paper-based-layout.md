@@ -1,4 +1,4 @@
-# eMedication Plan ChMed23A Paper-based Layout
+# eMedication Plan CHMED23A Paper-based Layout
 
 **Contact**
 
