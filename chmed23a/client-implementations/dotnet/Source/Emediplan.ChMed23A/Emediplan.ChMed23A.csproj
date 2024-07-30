@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Version>0.0.0.1</Version>
+		<AssemblyVersion>0.0.0.1</AssemblyVersion>
+		<FileVersion>0.0.0.1</FileVersion>
+		<Company>HCI Solutions AG</Company>
+		<Authors>HCI Solutions AG</Authors>
+		<Description>Contains .NET models representing ChMed23A as well as a serialier and validator.</Description>
+		<RepositoryUrl>http://tfs.hcisolutions.ch:8080/tfs/Content/Content/Publish/_git/Emediplan.ChMed23A</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Emediplan.ChMed23A.Tests.Unit" />
+	</ItemGroup>
+</Project>
