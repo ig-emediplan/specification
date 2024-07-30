@@ -39,7 +39,7 @@ This paper describes the currently proposed specification and reference implemen
 
 The reference consists of two major parts: 
 
-- the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16A1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 
+- the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16A1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 (see [ChTransmissionFormat](../chtransmissionformat/README.md)).
 - the content and layout specification for a paper-based layout used in print/PDF scenarios 
 
 This allows IT systems to store and transmit electronic medication plans as simple strings or text files in UTF-8. It also makes it possible to transmit the medication in a print-based form by using 2D barcodes. Therefore, the medication plan is readable by users and systems alike. This is necessary to guarantee a simple handling. 
@@ -1535,61 +1535,11 @@ Applies only to PolymedicationCheck.
 
 ### Encapsulation of the JSON medication object
 
-
-The aim was to have a compact, single string representation of the complete document in UTF-8 to make any object exchange between IT systems as easy as possible. In addition, the chosen solution also allows the inclusion of a 2D barcode on printed documents.
-
-To achieve this, the JSON object is optionally compressed and base64-encoded and then prefixed with a simple header. Therefore, the string representation is divided into two main parts, the "header" and the "content":
-
-- The header contains general information about the *Medication* object, its version and compression mode.
-- The content is the *Medication* object JSON (the *Patient* and a list of *Medicaments* as described in [this chapter](overview-of-the-object-model).
-
-![](./header-content-structure.png)
-
-Example data (Header part underlined)
-
-<ins>CHMED16A1</ins>H4sIAAAAAAAEAMVU3W7TMBR+lcq3S4SPHdtx7raVAaKFqutAAnoREreJ2jpT4gKj6ptxx4txnCwVSKQSu0GVqvPX7+fIpwdyuXcFSYiSFCjloGKtNQnI2GGRUZAh1SGwBUASyYTqC8oSSnHgVe4HZM7z1UqF6WcqwkhxjCKdhcJkWc650GIlcXZq8sXDvSEJtHGZpTtjXUOSj4cORyuIpWpRu0EekFnVDYzxmwbtZ+l13dTV7g9t5Ij1eZVicfYWMRab9byxmF1urMH8zpbezO3iNTkGj4RRJIHH7Bwj/J2RhUAHGa+2e/fF1PnPH9bu7XqAnHEhZHzGrqeGJ5EXVVbk9T7bfHr20tTfBwRAxCQHen7f/y7guqi2pnGmLm1j7MbUA/Qx1VLz8/aftvvf7L9Pm2ZQAQgBTEX/QwL+dJa6Et8/SQ7kqr0z0DGEFPxbDsh16R48lqktZjdv8FYwnabfyl2KhRfG5giasIBMTj3nWp4JPrmEjJ93J+fxx5PGTY3X1tbSzuHpGDthCPUu3eKM4O2Kujbr29C3QcSd9ex0udibYyKUWvbLZX3Au54EdupFfSD6QD4CCBEIBcsjjpJZUVnv6yJCxlEsYMRk+59z62pj/MLuLBreoe2vZj2KsfOhvMcyp0yhAzLfbbzj4y8tzloh3gQAAA==
-
-#### Header
-
-The header is composed of a fixed string length of 9 characters. The structure is shown in the figure below.
-
-![](./header-structure.png)
-
-##### Prefix (5 characters)
-
-The prefix is related to the *Medication* object; it always reads "CHMED" (CH: Switzerland/MED: Medication).
-
-##### Version (3 characters)
-
-Release year (2 numeric digits) and version sequence (1 alphabetic character).
-
-##### Compression (1 character)
-
-Boolean value to show whether the following content is compressed or not (base64-encoded GZIP of the JSON).
-
-#### Content
-
-The content is composed of a single medication plan JSON object, serialized as a string.
-
-It may or may not be GZIP compressed. If it is compressed (which we suggest), it must be base64-encoded.
-
-#### Reading the example data
-
-If you have an object that seems to be or should be in the CHMED format, proceed as follows:
-
-- It should be a text file or string in UTF-8
-- Take the first 8 characters of the object
-- Verify that it starts with CHMED
-- Find out if the data is compressed: bCompressed = (substr(8,1) == 1)
-- Find out what the CHMED version is: chmedv = substr(5,3)
-- Read the rest of the string/file into a separate string for processing
-- If the file is compressed, base64-decode the string, then GZIP-decompress it
-- Deserialize the result from JSON to your object class corresponding to the CHMED version
+To encapsulate and transmit the JSON object, [ChTransmissionFormat](../chtransmissionformat/README.md) should be used.
 
 ### In software: the shared libraries
 
 The ["IG eMediplan" website](https://emediplan.ch/downloads/) provides a free DLL that can be used in Windows-based software projects. In addition, the full source code of the library (written in C#) is available on request. This software speeds up the mapping from a customer implementation to the JSON object. Just include it in your software project and then add it as a reference (Ch.Emediplan.ChMed16A).
-
 
 #### How to deserialize an existing CHMED string
 
