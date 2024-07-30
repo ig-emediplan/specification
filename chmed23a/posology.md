@@ -1,4 +1,4 @@
-# eMedication Plan ChMed23A Posology
+# eMedication Plan CHMED23A Posology
 
 **Contact**
 
@@ -1852,7 +1852,7 @@ Take 1 in the evening
 
 ## Value sets
 
-The ChMed23A uses proprietary value sets described in this chapter.
+The CHMED23A uses proprietary value sets described in this chapter.
 
 ### Days of week
 
