@@ -50,3 +50,34 @@ implementers SHOULD:
 
 - ignore additional, unknown fields present in a JSON object:
   This allows the addition of new (optional) fields to a version without breaking implementations.
+
+## Client implementations
+
+The following table lists the known client implementations.
+Note that IG eMediplan does not maintain them unless it is explictly stated.
+It is not guaranteed that client implementations are compliant with the standard
+(the specification always superseeds any implementation).
+It is the responsibility of the maintainer
+to ensure the compliance with the specification.
+If you notice any misbehavior in client implementations,
+feel free to open a PR to fix it.
+
+| Version | Environment / Language | Author | Maintainer | Notes |
+| --- | --- | --- | --- | --- | 
+| CHMED16A | .NET / C# | HCI Solutions AG | - | Only the DLL has been published, see https://emediplan.ch/downloads/ |
+| CHMED23A | .NET / C# | HCI Solutions AG | - | [Source Code](./chmed23a/client-implementations/dotnet) |
+
+If you have implemented a client library in a certain language
+which you would be willing to share with others,
+please open a PR in this repository,
+adding it as a subdirectory to the corresponding version.
+
+Client implementations should help at least in one of the following areas:
+
+- Provide types to reduce accidental mistakes
+  (e.g. ensuring the data type and cardinality of a certain field is correct)
+- Provide enums/types and corresponding converters to make implementation easier
+  by allowing to usage of non-abbreviated names
+  (since many property names are shortened
+  to reduce the output size and enums are represented as integers).
+- Provide serialization/deserialization functionality
