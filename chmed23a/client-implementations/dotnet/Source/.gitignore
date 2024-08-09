@@ -1,0 +1,19 @@
+# User-specific files
+*.suo
+*.user
+
+# Build results
+bin/
+obj/
+
+# Visual Studio
+.vs/
+
+# Build artifacts
+artifacts/
+
+# Test and coverage results
+test-output/
+
+## Tools and add-ins (used by cake)
+tools/
