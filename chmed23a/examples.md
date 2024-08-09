@@ -1,4 +1,4 @@
-# eMedication Plan ChMed23A Examples
+# eMedication Plan CHMED23A Examples
 
 **Contact**
 
@@ -10,7 +10,7 @@ info@emediplan.ch
 
 ## Introduction
 
-This document shows examples of the ChMed23A based on some use cases. The use cases are fictitious and the choice of medication is random and does not constitute advertising or therapy recommendations.
+This document shows examples of the CHMED23A based on some use cases. The use cases are fictitious and the choice of medication is random and does not constitute advertising or therapy recommendations.
 
 ## Examples
 

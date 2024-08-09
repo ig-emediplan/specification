@@ -1,4 +1,4 @@
-# eMedication Plan ChMed23A
+# eMedication Plan CHMED23A
 
 **Contact**
 
@@ -13,7 +13,7 @@ info@emediplan.ch
 - [Table of contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Conventions](#conventions)
-- [The ChMed23A eMedication object](#the-chmed23a-emedication-object)
+- [The CHMED23A eMedication object](#the-chmed23a-emedication-object)
     - [Overview of the object model](#overview-of-the-object-model)
     - [Object model](#object-model)
         - [Medication](#medication)
@@ -36,42 +36,23 @@ info@emediplan.ch
 
 Medication plans are a central pillar of any eHealth solution. To enable interoperability between eHealth systems in Switzerland, the organization "[IG eMediplan](https://emediplan.ch/)" was founded in 2016. Its aim is to support and provide public, open-source, medication plan formats used by a broad group of stakeholders from the public and private sectors.
 
-This paper describes the specification and reference implementation of the object model for a medication plan, the so-called ChMed23A.
+This paper describes the specification and reference implementation of the object model for a medication plan, the so-called CHMED23A.
 
 The reference consists of the content and layout specification for the electronic document, a JSON file containing a medication.
 
 The content and layout specification for a paper-based layout used in Print/PDF scenarios is described in this [document](./paper-based-layout.md).
 
-A ChMed23A can be transmitted using the so called ChTransmissionFormat[^1], which specifies the type of the content and includes the compressed and Base64 encoded content.
-
-ChTransmissionFormat: <ins>input-type</ins>.`compressed-base64-payload`
-
-Example:
-
-<ins>ChMed23A</ins>.`H4sIAAAAAAAACq2OOw4CMQxE7zIt2ZUTAmzcLZsGiU+KUCEKYKlokIACRbk7jkLBAWisZz/NyAmb6/gAHxJWI7hsGgqhnsIOnBDBRmF4+9cebCuBtUL0Xy38g73MnIu+DxX/1nRUkCRiv1zLl9tzOF1uIloqxj9FGTKmId1oHcnxtGM7a+28c9YtJqSZCPkD+iD8fPQAAAA=`
-
-This allows IT systems to store and transmit electronic medication plans in the form of a JSON file in UTF-8. It also enables the medication plan to be transmitted in a print-based form by using QR barcodes. Therefore, the medication plan is readable by users and systems alike. This is necessary to guarantee simple handling.
-
-The possibility to transmit and store the compressed and Base64 encoded chunked payload (mainly to not exceed the maximum character size supported by a QR code), will be considered in the future.
-
-Here is an example which describes how to create chunks that fit on one line in this document:
-
-```
-Chunk 1: ChMed23A.1/4.H4sIAAAAAAAACq2OOw4CMQxE7zIt2ZUTAmzcLZsGiU+KUCEKYKlokIACRbk7jk
-Chunk 2: ChMed23A.2/4.LBAWisZz/NyAmb6/gAHxJWI7hsGgqhnsIOnBDBRmF4+9cebCuBtUL0Xy38g73MnI
-Chunk 3: ChMed23A.3/4.u+DxX/1nRUkCRiv1zLl9tzOF1uIloqxj9FGTKmId1oHcnxtGM7a+28c9YtJqSZCPkD+
-Chunk 4: ChMed23A.4/4.iD8fPQAAAA=
-```
+A CHMED23A can be transmitted using the [ChTransmissionFormat](../chtransmissionformat/README.md).
 
 ## Conventions
 
 Please refer to this [document](./conventions.md) for conventions used in this specification.
 
-## The ChMed23A eMedication object
+## The CHMED23A eMedication object
 
 ### Overview of the object model
 
-The hierarchy of the object model is quite simple. A ChMed23A eMedication contains one patient with personal data and medical data and multiple medicaments with associated posologies.
+The hierarchy of the object model is quite simple. A CHMED23A eMedication contains one patient with personal data and medical data and multiple medicaments with associated posologies.
 
 The object model is represented using a [JSON](https://en.wikipedia.org/wiki/JSON) structure.
 
@@ -346,7 +327,7 @@ The *Medication* object is the main object; it contains exactly one *Patient* an
   <td>string</td>
   <td>O</td>
   <td>O</td>
-  <td>The ID of the <i>Medication</i> object. The responsibility to set the ID is given to the ChMed23A creator.</td>
+  <td>The ID of the <i>Medication</i> object. The responsibility to set the ID is given to the CHMED23A creator.</td>
 </tr>
 <tr>
   <td>auth</td>
@@ -1386,7 +1367,7 @@ The *HealthcareOrganization* object contains the healthcare organization's data.
 
 ### Example of a JSON medication object
 
-A typical, valid ChMed23A object would look like this. This example describes that Dora Graber must take 1 pill of Med1 every day at 08:00.
+A typical, valid CHMED23A object would look like this. This example describes that Dora Graber must take 1 pill of Med1 every day at 08:00.
 
 ```json5
 {
@@ -1434,7 +1415,7 @@ A typical, valid ChMed23A object would look like this. This example describes th
 ```
 
 [^1]: ChTransmissionFormat: Transmission format (currently used with ChMed and ChVac)
-[^2]: The terms "gender" and "sex" are considered synonyms in ChMed23A.
+[^2]: The terms "gender" and "sex" are considered synonyms in CHMED23A.
 [^3]: Global Trade Item Number (GTIN): https://www.refdata.ch/de/artikel/anmeldung/artikel-refdatabase-gtin
 [^4]: The Pharmacode is the main article identifier in the INDEX database. It is managed by the editorial team at HCI Solutions AG.
 [^5]: The product number is a unique identifier for products in the INDEX database. It is managed by the editorial team at HCI Solutions AG.

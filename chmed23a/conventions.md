@@ -1,4 +1,4 @@
-# eMedication Plan ChMed23A Conventions
+# eMedication Plan CHMED23A Conventions
 
 **Contact**
 
