@@ -769,8 +769,7 @@ The RiskCategory object contains risks grouped by category.
 
 If the risk category is specified without any risk being specified in the list of risks, the entire risk category is considered as explicitly excluded for the current patient. If the category does not exist, the risks are considered as unknown for the patient.
 
-The possible risks are listed below. The allergies have not been listed here. You can find them on the website of the [eMediplan FHIR Implementation Guide](https://build.fhir.org/ig/ahdis/chmed/branches/master/CodeSystem-chmed-codesystem-risks-cdscode.html).
-
+The possible risks are listed below. The allergies have not been listed here. You can find them [here](./terminology.md#risks).
 
 
 |**RC Id**|**Risk Id**|**German**|**French**|
@@ -787,7 +786,7 @@ The possible risks are listed below. The allergies have not been listed here. Yo
 |3|612|Frauen im gebärfähigen Alter|Femmes en âge de procréer|
 |4|580|Leistungssportler|Sportifs de compétition|
 |5|615|Potenziell gefährlichen Situationen ausgesetzt, wie beispielsweise dem Führen von Fahrzeugen, dem Bedienen von Maschinen oder dem Arbeiten in grossen Höhen|Exposés à des situations potentiellement dangereuses, comme la conduite de véhicules, machines ou travaillant en haute altitude|
-|6|The allergies have not been listed here. The full list can be found in the [eMediplan FHIR Implementation Guide](https://build.fhir.org/ig/ahdis/chmed/branches/master/CodeSystem-chmed-codesystem-risks-cdscode.html)|||
+|6|The allergies have not been listed here. The full list can be found [here](./terminology.md#risks)|||
 |7|779|Diabetes mellitus Typ 1|Diabète de type 1|
 |7|780|Diabetes mellitus Typ 2|Diabète de type 2|
 
@@ -1014,7 +1013,7 @@ The table below describes the properties of a posology. Please refer to the [pos
 
   Allowed values (code representation, display values are not allowed):
 
-  See [eMediplan FHIR Implementation Guide](https://build.fhir.org/ig/ahdis/chmed/branches/master/CodeSystem-chmed-codesystem-cdtyp9.html)
+  See [Unit](./terminology.md#unit)
 
   </td>
 </tr>
@@ -1026,8 +1025,12 @@ The table below describes the properties of a posology. Please refer to the [pos
   <td><p>Application instructions (further information on how to apply the medication, e.g. dissolve in a glass of
     water or fruit juice).</p>
     <p>Please note: For unstructured posology we recommend using the <i>Posology</i> object <i>FreeText</i> instead of
-      <i>AppInstr</i>. </p>
-    <p>Please refer to the [posology specification](./posology.md).</p></td>
+      <i>AppInstr</i>.
+  </p>
+
+  Please refer to the [posology specification](./posology.md).
+
+  </td>
 </tr>
 <tr>
   <td>roa</td>
@@ -1040,7 +1043,7 @@ The table below describes the properties of a posology. Please refer to the [pos
 
   Allowed values (code representation, display values are not allowed):
 
-  See [eMediplan FHIR Implementation Guide](http://chmed.emediplan.ch/fhir/CodeSystem-chmed-codesystem-cdtyp61.html)
+  See [Route of Administration](./terminology.md#route-of-administration)
 
   </td>
 </tr>
@@ -1055,7 +1058,7 @@ The table below describes the properties of a posology. Please refer to the [pos
 
   Allowed values (code representation, display values are not allowed):
 
-  See [eMediplan FHIR Implementation Guide](http://chmed.emediplan.ch/fhir/CodeSystem-chmed-codesystem-cdtyp61.html)
+  See [Method of Administration](./terminology.md#method-of-administration)
 
   </td>
 </tr>
@@ -1387,6 +1390,8 @@ The *HealthcareOrganization* object contains the healthcare organization's data.
 ### Example of a JSON medication object
 
 A typical, valid ChMed23A object would look like this. This example describes that Dora Graber must take 1 pill of Med1 every day at 08:00.
+
+More examples can be found [here](./examples.md).
 
 ```json5
 {
