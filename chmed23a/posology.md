@@ -329,7 +329,7 @@ A posology CAN contain a start and an end date for the treatment and MUST specif
 
   Allowed values (code representation, display values are not allowed):
 
-  See [eMediplan FHIR Implementation Guide](https://build.fhir.org/ig/ahdis/chmed/branches/master/CodeSystem-chmed-codesystem-cdtyp9.html)
+  See [Unit](./terminology.md#unit)
 
   </td>
 </tr>
@@ -354,7 +354,7 @@ A posology CAN contain a start and an end date for the treatment and MUST specif
 
   Allowed values (code representation, display values are not allowed):
 
-  See [eMediplan FHIR Implementation Guide](http://chmed.emediplan.ch/fhir/CodeSystem-chmed-codesystem-cdtyp61.html)
+  See [Route of Administration](./terminology.md#route-of-administration)
 
   </td>
 </tr>
@@ -369,7 +369,7 @@ A posology CAN contain a start and an end date for the treatment and MUST specif
 
   Allowed values (code representation, display values are not allowed):
 
-  See [eMediplan FHIR Implementation Guide](http://chmed.emediplan.ch/fhir/CodeSystem-chmed-codesystem-cdtyp61.html)
+  See [Method of Administration](./terminology.md#method-of-administration)
 
   </td>
 </tr>
