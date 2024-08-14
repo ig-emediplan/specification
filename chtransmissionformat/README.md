@@ -8,6 +8,13 @@ Amthausgasse 18, 3011 Bern<br>
 Tel. +41 (0)31 560 00 24<br>
 info@emediplan.ch
 
+## Terminology
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in
+RFC 2119.
+
 ## Introduction
 
 Medication plans often need to be printed on paper.
@@ -34,7 +41,7 @@ but is optimized for the usage in the QR code.
 
 ## Format
 
-A ChTransmissionFormat document must use UTF-8 encoding.
+A ChTransmissionFormat document MUST use UTF-8 encoding.
 
 ```
 CHMED{ReleaseYear}{SubVersion}{AdditionalMetaData}{Data}
@@ -49,28 +56,32 @@ Representation as regex:
 Description and constraints:
 
 - `CHMED` (Prefix): This is the fixed string `CHMED`.
-  It is always the same value and should be used to determine if the given input string
-  should be tried to parse as ChTransmissionFormat.
-  During parsing, it should be treated as case-insensitive (e.g. `ChMed` should also be accepted)
-  but during serialization all uppercase should be used.
+  This is a fixed value and is used to determine if the given input string
+  can be parsed as ChTransmissionFormat.
+  During parsing, it SHOULD be treated as case-insensitive (e.g. `ChMed` is also accepted)
+  but during serialization all uppercase MUST be used.
 - `ReleaseYear`: two digits (e.g. `16`)
 - `SubVersion`: At least a single uppercase alphabetic character (e.g. `A`).
-  Depending on the `ReleaseYear`, more than one character can be allowed.
-  During parsing, it should be treated as case-insensitive (e.g. `a` should also be accepted)
-  but during serialization all uppercase should be used.
-- `AdditionalMetaData`: Based on the `ReleaseYear`, additional meta data may be required.
+  Depending on the `ReleaseYear`, more than one character may be allowed.
+  During parsing, it SHOULD be treated as case-insensitive (e.g. `a` is also accepted)
+  but during serialization all uppercase MUST be used.
+- `AdditionalMetaData`: Based on the `ReleaseYear`, additional meta data may be REQUIRED.
 - `Data`: The actual data (JSON) which (after applying transformations based on the `ReleaseYear`)
   needs to conform with the corresponding specification defining the format of the JSON.
 
 Since part of the format is dependent on the `ReleaseYear`,
 each available `ReleaseYear` is covered independently.
-Only years listed here are considered valid for use with ChTransmissionFormat.
+Years not listed here MUST NOT be accepted when parsing using ChTransmissionFormat.
 All constraints listed above also apply to the specific parts defined for a `ReleaseYear`.
 
 Note that the JSON format itself does not contain a version marker
 as it would be duplicated data when transmitted using ChTransmissionFormat
 and one of the goals is to reduce the data size.
-Therefore, CHMED documents should always be transmitted using ChTransmissionFormat.
+Therefore, CHMED documents SHOULD be transmitted using ChTransmissionFormat
+(there may be transmission environments
+where size is not relevant
+and the used version is implicitly defined/transmitted in some other way
+which allows the transfer of the plain JSON data instead).
 
 ### ReleaseYear 16
 
@@ -92,7 +103,7 @@ Description and constraints:
   and determines if compression is used for the `Data`.
 - `Data`:
   - if `Compression = 0`: Plain JSON document.
-    Note that it is highly recommended to always compress the contents.
+    Note that it is RECOMMENDED to compress the contents.
     Later versions (e.g. `ReleaseYear` 23) do no longer support documents without compression.
   - if `Compression = 1`: Base64 encoded and gzipped JSON document
 
@@ -120,7 +131,7 @@ Description and constraints:
 - `ChunkMetaData`: Optional, see below for further information.
 - `Data`:
   - if `ChunkMetaData` is present: Chunk of base64 encoded and gzipped JSON document.
-    If all chunks are concatenated in the correct order, it must result in a valid JSON document
+    If all chunks are concatenated in the correct order, it MUST result in a valid JSON document
     (after base64 decoding and gzip decompressing).
     Note that a single chunk is not necessarily proper base64 encoded nor properly gzip compressed.
     This property only holds for the dechunked data.
@@ -155,11 +166,11 @@ to provide a mechanism to correlate the entries itself.
 Description and constraints:
 
 - `Index`: Positive integer which is the 1-based index of the chunks.
-  The `Index` must be lower or equal to the `Total`
-  and must be unique within the list of ChTransmissionFormat (23) documents
+  The `Index` MUST be lower or equal to the `Total`
+  and be unique within the list of ChTransmissionFormat (23) documents
   which represent the full document.
 - `Total`: Positive integer which defines the total number of chunks the full document has been split into.
-  Must be greater than 1 as `ChunkMetaData` must not be used if no actual chunking is applied.
+  MUST be greater than 1 as `ChunkMetaData` and not be used if no actual chunking is applied.
 
 To recreate the full document,
 `Total` number of ChTransmissionFormat (23) documents need to be received
@@ -209,11 +220,11 @@ This also demonstrates that the format itself is pretty simple.
 
 After the prefix `CHMED16` follows the `SubVersion`
 which is not relevant for the parsing of ChTransmissionFormat
-but should be stored for further processing of the extracted JSON data.
+but is relevant for further processing of the extracted JSON data.
 The following digit `Compression` determines,
 if the data needs to be base64 decoded and decompressed
 or if the JSON is available directly.
-Since it is recommended to always compress the data,
+Since it is RECOMMENDED to compress the data,
 no examples are provided with `Compression = 0`.
 
 **Parsing**
@@ -228,7 +239,7 @@ echo 'SOME_CHMED16_CHTRANSMISSIONFORMAT_DOCUMENT' | sed -r 's/^CHMED16[A-Z]1(.*)
 echo 'SOME_CHMED16_JSON' | gzip -n | base64 | sed -r 's/(.*)/CHMED16A1\1/'
 ```
 
-Note that a correct implementation should be able to roundtrip,
+Note that a correct implementation MUST be able to roundtrip,
 as do the presented commands:
 
 ```shell
@@ -239,7 +250,7 @@ echo '{"x":"This is not a valid CHMED16 JSON but is sufficient to show that the 
 
 After the prefix `CHMED23` follows the `SubVersion`
 which is not relevant for the parsing of ChTransmissionFormat
-but should be stored for further processing of the extracted JSON data.
+but is relevant for further processing of the extracted JSON data.
 After the `SubVersion` follows a dot (`.`) to delimit the header from the content.
 Optionally, `ChunkMetaData` can follow, which is delimited by a dot again.
 
@@ -258,7 +269,7 @@ echo 'SOME_CHMED23_CHTRANSMISSIONFORMAT_DOCUMENT' | sed -r 's/^CHMED23[A-Z]+\.(.
 echo 'SOME_CHMED23_JSON' | gzip -n | base64 | sed -r 's/(.*)/CHMED23A.\1/'
 ```
 
-Note that a correct implementation should be able to roundtrip,
+Note that a correct implementation MUST be able to roundtrip,
 as do the presented commands:
 
 ```shell
