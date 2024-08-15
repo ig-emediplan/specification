@@ -42,7 +42,12 @@ The reference consists of the content and layout specification for the electroni
 
 The content and layout specification for a paper-based layout used in Print/PDF scenarios is described in this [document](./paper-based-layout.md).
 
-A CHMED23A can be transmitted using the [ChTransmissionFormat](../chtransmissionformat/README.md).
+CHMED23A is transmitted using the [ChTransmissionFormat](../chtransmissionformat/README.md).
+Note that CHMED23A (the JSON described in this specification) does not contain a version marker
+which is only included in ChTransmissionFormat
+as one of the main goals is to keep the content as compact as possible.
+Therefore, if CHMED23A is transmitted without being wrapped in ChTransmissionFormat,
+the version needs to be transferred in another way.
 
 ## Conventions
 
@@ -1419,7 +1424,6 @@ More examples can be found [here](./examples.md).
 }
 ```
 
-[^1]: ChTransmissionFormat: Transmission format (currently used with ChMed and ChVac)
 [^2]: The terms "gender" and "sex" are considered synonyms in CHMED23A.
 [^3]: Global Trade Item Number (GTIN): https://www.refdata.ch/de/artikel/anmeldung/artikel-refdatabase-gtin
 [^4]: The Pharmacode is the main article identifier in the INDEX database. It is managed by the editorial team at HCI Solutions AG.
