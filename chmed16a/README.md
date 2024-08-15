@@ -1536,6 +1536,11 @@ Applies only to PolymedicationCheck.
 ### Encapsulation of the JSON medication object
 
 To encapsulate and transmit the JSON object, [ChTransmissionFormat](../chtransmissionformat/README.md) should be used.
+Note that CHMED16A (the JSON described in this specification) does not contain a version marker
+which is only included in ChTransmissionFormat
+as one of the main goals is to keep the content as compact as possible.
+Therefore, if CHMED16A is transmitted without being wrapped in ChTransmissionFormat,
+the version needs to be transferred in another way.
 
 ### In software: the shared libraries
 
