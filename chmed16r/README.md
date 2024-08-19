@@ -136,6 +136,8 @@ classDiagram
         -City[1]: string
         -Country[0..1]: string
         -Zsr[0..1]: string
+        -Phone[0..1]: string
+        -Email[0..1]: string
     }
 
     Patient "1" -- "0..*" PatientId
@@ -728,6 +730,18 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td><p>ZSR number</p>
     <p>The ZSR number may only be set once, either in object <i>HealthcarePerson</i> or in object <i>HealthcareOrganization</i>.
     </p></td>
+</tr>
+<tr>
+  <td>Phone</td>
+  <td>string</td>
+  <td>O</td>
+  <td>Phone number</td>
+</tr>
+<tr>
+  <td>Email</td>
+  <td>string</td>
+  <td>O</td>
+  <td>E-mail address</td>
 </tr>
 </table>
 
