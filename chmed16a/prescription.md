@@ -1,4 +1,4 @@
-# eMedication Plan CHMED16R
+# eMedication Plan CHMED16A - Prescription
 
 **Contact**
 
@@ -13,8 +13,8 @@ info@emediplan.ch
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
     - [Revisions](#revisions)
-- [CHMED16R eMedication object](#chmed16r-emedication-object)
-    - [Overview of the object model](#chmed16r-emedication-object)
+- [CHMED16A eMedication object](#chmed16a-emedication-object)
+    - [Overview of the object model](#chmed16a-emedication-object)
     - [Using JSON as the object model format](#using-json-as-the-object-model-format)
     - [Object model](#object-model)
     - [Encapsulation of the JSON medication object](#encapsulation-of-the-json-medication-object)
@@ -23,18 +23,14 @@ info@emediplan.ch
 
 Medication plans are a central pillar of any eHealth solution. To enable interoperability between eHealth systems in Switzerland, the organisation "[IG eMediplan](https://emediplan.ch/)" was founded in 2016. Its aim is to support and provide public, open source, medication plan formats used by a broad group of stakeholders from the public and private sectors. 
 
-This paper describes the currently proposed specification and reference implementation of the object model for an electronic prescription, the so-called CHMED16R.
+This paper describes the currently proposed specification and reference implementation of the object model for an electronic prescription, the so-called CHMED16A.
 
 > [!IMPORTANT]
-> CHMED16R is based on CHMED16A and only adds the new entities HealthcarePerson and HealthcareOrganization.
-> This is required for the prescription document (Rx) to conform with the law.
-> Therefore, CHMED16R is only relevant when working with Rx documents
-> (therefore also the version "R" for Rx).
-> Due to this, the parts of the CHMED16A specification
-> which are not impacting the Rx document directly (e.g. the paper-based layout)
-> have been removed.
+> This is the specification for using CHMED16A in the context of prescriptions.
+> As prescriptions share a lot of similarities with medication plans,
+> most of the fields/entities are shared with the [medication plan specification](./README.md).
 
-This document is the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16R1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 (see [ChTransmissionFormat](../chtransmissionformat/README.md)).
+This document is the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16A1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 (see [ChTransmissionFormat](../chtransmissionformat/README.md)).
 
 This allows IT systems to store and transmit electronic medication plans as simple strings or text files in UTF-8. It also makes it possible to transmit the medication in a print-based form by using 2D barcodes. Therefore, the medication plan is readable by users and systems alike. This is necessary to guarantee a simple handling. 
 
@@ -69,7 +65,7 @@ On the other hand, it cannot
 - Change the type of a field to either a broader version or an incompatible one
   (e.g. change a URL to a string or a string to an integer)
 
-## CHMED16R eMedication object
+## CHMED16A eMedication object
 
 ### Overview of the object model
 
@@ -304,8 +300,8 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   "patient" is used to designate the author. Optionally, the patient's first name, last name and date of birth can also be specified additionally.
 
   Note that the GLN provided in this field should also be provided
-  in [HealthcarePerson](#healthcareperson) or [HealthcareOrganization](#healthcareorganization) respectively.
-  This is a duplication of data which allows systems only supporting CHMED16A to support CHMED16R at least to some degree.
+  in [HealthcarePerson](#healthcareperson) or [HealthcareOrganization](#healthcareorganization) respectively
+  for revision 2+.
 
   </td>
 </tr>
@@ -863,10 +859,10 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 ### Encapsulation of the JSON medication object
 
 To encapsulate and transmit the JSON object, [ChTransmissionFormat](../chtransmissionformat/README.md) should be used.
-Note that CHMED16R (the JSON described in this specification) does not contain a version marker
+Note that CHMED16A (the JSON described in this specification) does not contain a version marker
 which is only included in ChTransmissionFormat
 as one of the main goals is to keep the content as compact as possible.
-Therefore, if CHMED16R is transmitted without being wrapped in ChTransmissionFormat,
+Therefore, if CHMED16A is transmitted without being wrapped in ChTransmissionFormat,
 the version needs to be transferred in another way.
 
 [^1]: R: Required

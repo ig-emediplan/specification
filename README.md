@@ -34,7 +34,6 @@ It uses the following states a specification can be in:
 | Version | State | Use |
 | --- | --- | --- |
 | [CHMED16A](./chmed16a) | Stable | System implementers should aim to be able to read this version as it is widely used. For generating new medication plans, CHMED23A should be used instead. |
-| [CHMED16R](./chmed16r) | Ready for adoption | This is a newer version of CHMED16A which is only for prescription documents (Rx) to make sure these conform with the law. |
 | [CHMED20AF](https://chmed20af.emediplan.ch/fhir/) | Stable | This a FHIR version which defines the mapping from CHMED16A to FHIR. It is a superset of [CH EMED](https://fhir.ch/ig/ch-emed/index.html) which enables interoperability with the electronic patient record. |
 | [CHMED23A](./chmed23a) | Ready for adoption | System implementers should use this version for both reading and creating medication plans JSON documents (the QR code). Note that certain parts of the specification are not available yet (e.g. physical layout). |
 
