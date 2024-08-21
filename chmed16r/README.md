@@ -12,6 +12,7 @@ info@emediplan.ch
 
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
+    - [Revisions](#revisions)
 - [CHMED16R eMedication object](#chmed16r-emedication-object)
     - [Overview of the object model](#chmed16r-emedication-object)
     - [Using JSON as the object model format](#using-json-as-the-object-model-format)
@@ -36,6 +37,37 @@ This paper describes the currently proposed specification and reference implemen
 This document is the content and layout specification for the electronic document, a string/text file containing a header such as "CHMED16R1" and the (compressed, encoded) medication plan as a JSON object in UTF-8 (see [ChTransmissionFormat](../chtransmissionformat/README.md)).
 
 This allows IT systems to store and transmit electronic medication plans as simple strings or text files in UTF-8. It also makes it possible to transmit the medication in a print-based form by using 2D barcodes. Therefore, the medication plan is readable by users and systems alike. This is necessary to guarantee a simple handling. 
+
+### Revisions
+
+The object model contains an attribute `rev` (short for revision) on the root level (medication object).
+It designates which revision of this specification is used.
+Revisions allow to introduce changes to the specification
+with no direct impact to existing implementations.
+
+For this to work, the following guideline for implementers is important:
+
+> [!IMPORTANT]
+> Parsers MUST ignore unknown fields and not fail if any are encountered.
+> Serializers SHOULD NOT include unknown fields.
+
+A new revision must be able to be parsed by a parser only supporting an older revision.
+In other words, a document of a certain revision must be valid
+if validated against each prior revision (and the assigned revision itself).
+
+This means a new revision can
+
+- Add a new field (whether as required or optional)
+- Remove an optional field
+- Narrow the cardinality of a field, e.g. make a field required which was optional previously
+- Narrow the type of a field, e.g. change a string to a URL
+
+On the other hand, it cannot
+
+- Remove a required field
+- Relax the cardinality, e.g. make a required field optional
+- Change the type of a field to either a broader version or an incompatible one
+  (e.g. change a URL to a string or a string to an integer)
 
 ## CHMED16R eMedication object
 
@@ -91,6 +123,7 @@ classDiagram
     }
 
     class Medication {
+        -rev[0..1]: int
         -Patient[1]: Patient
         -Medicaments[0..*]: Medicaments
         -PFields[0..*]: PrivateField
@@ -160,6 +193,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -167,8 +201,23 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>Rx</td>
 </tr>
 <tr>
+  <td>rev</td>
+  <td>number</td>
+  <td>2</td>
+  <td>O</td>
+  <td>
+
+  Default: 1
+
+  The [revision number](#revisions) of the specification used.
+  If no revision number is specified, it is assumed it uses revision 1.
+
+  </td>
+</tr>
+<tr>
   <td>Patient</td>
   <td><i>Patient</i></td>
+  <td>1</td>
   <td>
 
   R[^1]
@@ -187,6 +236,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   list of [Medicament](#medicament)
 
   </td>
+  <td>1</td>
   <td>0-N</td>
   <td>
 
@@ -201,6 +251,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   list of [Private Field](#private-field)
 
   </td>
+  <td>1</td>
   <td>0-N</td>
   <td>
 
@@ -211,6 +262,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>PSchema</td>
   <td>string</td>
+  <td>1</td>
   <td>
 
   O[^2]
@@ -221,6 +273,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>MedType</td>
   <td>number</td>
+  <td>1</td>
   <td>R</td>
   <td>
     <p>The type of the <i>Medication</i> object Possible values: </p>
@@ -230,12 +283,14 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Id</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>The ID of the <i>Medication</i> object</td>
 </tr>
 <tr>
   <td>Auth</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>
 
@@ -257,6 +312,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Zsr</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>
 
@@ -267,6 +323,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Dt</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>
 
@@ -277,6 +334,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Rmk</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>
     Remark (any information/advice the author would like to share independently of a specific medicament)
@@ -285,6 +343,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>HcPerson</td>
   <td><i>HealthcarePerson</i></td>
+  <td>2</td>
   <td>R</td>
   <td>
 
@@ -297,6 +356,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>HcOrg</td>
   <td><i>HealthcareOrganization</i></td>
+  <td>2</td>
   <td>R</td>
   <td>
 
@@ -314,6 +374,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -323,18 +384,21 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>FName</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>First name</td>
 </tr>
 <tr>
   <td>LName</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>Last name</td>
 </tr>
 <tr>
   <td>BDt</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>
 
@@ -345,6 +409,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Gender</td>
   <td>number</td>
+  <td>1</td>
   <td>O</td>
   <td>
 
@@ -361,36 +426,42 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Street</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>Street</td>
 </tr>
 <tr>
   <td>Zip</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>Zip code</td>
 </tr>
 <tr>
   <td>City</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>City</td>
 </tr>
 <tr>
   <td>Phone</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>Phone number</td>
 </tr>
 <tr>
   <td>Email</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>E-mail address</td>
 </tr>
 <tr>
   <td>Rcv</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>Receiver (GLN) of the electronic prescription. To be used if the electronic prescription is to be transmitted
     electronically to a healthcare professional.
@@ -403,6 +474,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   list of [PatientId](#patientid)
  
   </td>
+  <td>1</td>
   <td>0-N</td>
   <td>
  
@@ -417,6 +489,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   list of [Private Fields](#private-field)
  
   </td>
+  <td>1</td>
   <td>0-N</td>
   <td>
  
@@ -433,6 +506,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -442,6 +516,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Type</td>
   <td>number</td>
+  <td>1</td>
   <td>R</td>
   <td>
 
@@ -456,6 +531,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Val</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>The ID value</td>
 </tr>
@@ -467,6 +543,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -476,6 +553,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Id</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>
 
@@ -486,6 +564,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>IdType</td>
   <td>number</td>
+  <td>1</td>
   <td>R</td>
   <td><p>The type of the <i>Id</i>. Possible values:</p><p>1: None </p>
     <p>2: GTIN </p>
@@ -499,6 +578,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   list of [Posology](#posology)
 
   </td>
+  <td>1</td>
   <td>0-1</td>
   <td>
 
@@ -509,6 +589,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Unit</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>
 
@@ -522,24 +603,28 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>AppInstr</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>Application instructions (further information on how to apply the medication, e.g. take before meals)</td>
 </tr>
 <tr>
   <td>Rep</td>
   <td>number</td>
+  <td>1</td>
   <td>O</td>
   <td>Integer which defines the number of repetitions in months, e.g. permanent prescription for 6 months</td>
 </tr>
 <tr>
   <td>Subs</td>
   <td>number</td>
+  <td>1</td>
   <td>O</td>
   <td>1 if medicament should not be substituted, 0 otherwise. Default: 0</td>
 </tr>
 <tr>
   <td>NbPack</td>
   <td>number</td>
+  <td>1</td>
   <td>O</td>
   <td>Number of packages to be delivered. Default: 1</td>
 </tr>
@@ -550,6 +635,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   list of [Private Fields](#private-field)
 
   </td>
+  <td>1</td>
   <td>0-N</td>
   <td>
 
@@ -565,6 +651,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -574,6 +661,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>DtTo</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>
 
@@ -586,6 +674,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>D</td>
   <td>list of number</td>
+  <td>1</td>
   <td>0-4</td>
   <td>
 
@@ -602,6 +691,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -611,12 +701,14 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Nm</td>
   <td>string</td>
+  <td>1</td>
   <td>R</td>
   <td>The name of the field</td>
 </tr>
 <tr>
   <td>Val</td>
   <td>string</td>
+  <td>1</td>
   <td>O</td>
   <td>The value of the field</td>
 </tr>
@@ -627,6 +719,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   list of [Private Fields](#private-field)
 
   </td>
+  <td>1</td>
   <td>0-N</td>
   <td>The list of private fields</td>
 </tr>
@@ -638,6 +731,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -647,24 +741,28 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Gln</td>
   <td>string</td>
+  <td>2</td>
   <td>R</td>
   <td>The GLN</td>
 </tr>
 <tr>
   <td>FName</td>
   <td>string</td>
+  <td>2</td>
   <td>R</td>
   <td>First name</td>
 </tr>
 <tr>
   <td>LName</td>
   <td>string</td>
+  <td>2</td>
   <td>R</td>
   <td>Last name</td>
 </tr>
 <tr>
   <td>Zsr</td>
   <td>string</td>
+  <td>2</td>
   <td>O</td>
   <td><p>ZSR number</p>
     <p>The ZSR number may only be set once, either in object <i>HealthcarePerson</i> or in object <i>HealthcareOrganization</i>.
@@ -678,6 +776,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <th rowspan="2"><b>Name</b></th>
   <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
   <th><b>Usage</b></th>
   <th rowspan="2"><b>Description</b></th>
 </tr>
@@ -687,36 +786,42 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Name</td>
   <td>string</td>
+  <td>2</td>
   <td>R</td>
   <td>Name</td>
 </tr>
 <tr>
   <td>NameAffix</td>
   <td>string</td>
+  <td>2</td>
   <td>O</td>
   <td>Additional name, e.g. department within the organization</td>
 </tr>
 <tr>
   <td>Street</td>
   <td>string</td>
+  <td>2</td>
   <td>R</td>
   <td>Street</td>
 </tr>
 <tr>
   <td>Zip</td>
   <td>string</td>
+  <td>2</td>
   <td>R</td>
   <td>Postcode</td>
 </tr>
 <tr>
   <td>City</td>
   <td>string</td>
+  <td>2</td>
   <td>R</td>
   <td>City</td>
 </tr>
 <tr>
   <td>Country</td>
   <td>string</td>
+  <td>2</td>
   <td>O</td>
   <td>
 
@@ -733,6 +838,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Zsr</td>
   <td>string</td>
+  <td>2</td>
   <td>O</td>
   <td><p>ZSR number</p>
     <p>The ZSR number may only be set once, either in object <i>HealthcarePerson</i> or in object <i>HealthcareOrganization</i>.
@@ -741,12 +847,14 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>Phone</td>
   <td>string</td>
+  <td>2</td>
   <td>O</td>
   <td>Phone number</td>
 </tr>
 <tr>
   <td>Email</td>
   <td>string</td>
+  <td>2</td>
   <td>O</td>
   <td>E-mail address</td>
 </tr>
