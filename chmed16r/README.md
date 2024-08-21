@@ -123,7 +123,7 @@ classDiagram
     }
 
     class HealthcarePerson {
-        -Gln[0..1]: string
+        -Gln[1]: string
         -FName[1]: string
         -LName[1]: string
         -Zsr[0..1]: string
@@ -131,6 +131,7 @@ classDiagram
 
     class HealthcareOrganization {
         -Name[1]: string
+        -NameAffix[0..1]: string
         -Street[1]: string
         -Zip[1]: string
         -City[1]: string
@@ -143,8 +144,8 @@ classDiagram
     Patient "1" -- "0..*" PatientId
     Patient "1" -- "0..*" PrivateField
     Medication "1" -- "1" Patient
-    Medication "1" -- "0..1" HealthcarePerson
-    Medication "1" -- "0..1" HealthcareOrganization
+    Medication "1" -- "1" HealthcarePerson
+    Medication "1" -- "1" HealthcareOrganization
     Medication "1" -- "0..*" Medicament
     Medication "1" -- "0..*" PrivateField
     Medicament "1" -- "0..*" Posology
@@ -688,6 +689,12 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>string</td>
   <td>R</td>
   <td>Name</td>
+</tr>
+<tr>
+  <td>NameAffix</td>
+  <td>string</td>
+  <td>O</td>
+  <td>Additional name, e.g. department within the organization</td>
 </tr>
 <tr>
   <td>Street</td>
