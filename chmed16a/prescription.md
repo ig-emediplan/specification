@@ -40,11 +40,13 @@ The object model contains an attribute `rev` (short for revision) on the root le
 It designates which revision of this specification is used.
 Revisions allow to introduce changes to the specification
 with no direct impact to existing implementations.
+Revision numbers start at 1 and increase with new revisions.
 
 For this to work, the following guideline for implementers is important:
 
 > [!IMPORTANT]
 > Parsers MUST ignore unknown fields and not fail if any are encountered.
+> 
 > Serializers SHOULD NOT include unknown fields.
 
 A new revision must be able to be parsed by a parser only supporting an older revision.
