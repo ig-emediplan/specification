@@ -137,8 +137,6 @@ classDiagram
         -Patient[1]: Patient
         -Medicaments[0..*]: Medicaments
         -Recoms[0..*]: Recommendation
-        -PFields[0..*]: PrivateField
-        -PSchema[0..1]: string
         -MedType[1]: int
         -Id[1]: string
         -Auth[1]: string
@@ -147,6 +145,8 @@ classDiagram
         -Rmk[0..1]: string
         -ValBy[0..1]: string
         -ValDt[0..1]: string
+        -PSchema[0..1]: string
+        -PFields[0..*]: PrivateField
     }
 
     class Medicament {
@@ -176,7 +176,7 @@ classDiagram
         -DtTo[0..1]: string
         -CyDu[1]: int
         -InRes[0..1]: int
-        -D[0..*]: double
+        -D[0..4]: double
         -TT[0..*]: TakingTime
     }
 
@@ -269,34 +269,6 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   </td>
 </tr>
 <tr>
-  <td>PFields</td>
-  <td>
-
-  list of [Private Field](#private-field)
-
-  </td>
-  <td>0-N</td>
-  <td>0-N</td>
-  <td>0-N</td>
-  <td>
-
-  The list of private fields. Please refer to [Private Field](#private-field)
-
-  </td>
-</tr>
-<tr>
-  <td>PSchema</td>
-  <td>string</td>
-  <td>
-
-  O[^2]
-
-  </td>
-  <td>O</td>
-  <td>O</td>
-  <td>The schema of the private fields. When empty or not specified, all private fields must be ignored.</td>
-</tr>
-<tr>
   <td>MedType</td>
   <td>number</td>
   <td>R</td>
@@ -340,7 +312,11 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>string</td>
   <td>-</td>
   <td>-</td>
-  <td>O</td>
+  <td>
+
+  O[^2]
+
+  </td>
   <td>
 
   ZSR ([Zahlstellenregister](https://www.sasis.ch/de/Angebot/Produkt/ProductDetail?topMenuId=447)) number of the author or their organisation
@@ -390,6 +366,34 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>
 
   Validate date: Date of validation, Format: yyyy-mm-ddThh:mm:ss+02:00 ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Combined date and time in UTC)
+
+  </td>
+</tr>
+<tr>
+  <td>PSchema</td>
+  <td>string</td>
+  <td>
+
+  O
+
+  </td>
+  <td>O</td>
+  <td>O</td>
+  <td>The schema of the private fields. When empty or not specified, all private fields must be ignored.</td>
+</tr>
+<tr>
+  <td>PFields</td>
+  <td>
+
+  list of [Private Field](#private-field)
+
+  </td>
+  <td>0-N</td>
+  <td>0-N</td>
+  <td>0-N</td>
+  <td>
+
+  The list of private fields. Please refer to [Private Field](#private-field)
 
   </td>
 </tr>
