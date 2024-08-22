@@ -1,4 +1,4 @@
-# eMedication Plan CHMED16A - Prescription
+# CHMED16A - Prescription (Revision 2)
 
 **Contact**
 
@@ -13,7 +13,7 @@ info@emediplan.ch
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
     - [Revisions](#revisions)
-- [CHMED16A eMedication object](#chmed16a-emedication-object)
+- [Medication object](#medication-object)
     - [Overview of the object model](#chmed16a-emedication-object)
     - [Using JSON as the object model format](#using-json-as-the-object-model-format)
     - [Object model](#object-model)
@@ -23,7 +23,7 @@ info@emediplan.ch
 
 Medication plans are a central pillar of any eHealth solution. To enable interoperability between eHealth systems in Switzerland, the organisation "[IG eMediplan](https://emediplan.ch/)" was founded in 2016. Its aim is to support and provide public, open source, medication plan formats used by a broad group of stakeholders from the public and private sectors. 
 
-This paper describes the currently proposed specification and reference implementation of the object model for an electronic prescription, the so-called CHMED16A.
+This paper describes the currently proposed specification and reference implementation of the object model for an electronic prescription, the so-called CHMED16A - Prescription.
 
 > [!IMPORTANT]
 > This is the specification for using CHMED16A in the context of prescriptions.
@@ -67,14 +67,14 @@ On the other hand, it cannot
 - Change the type of a field to either a broader version or an incompatible one
   (e.g. change a URL to a string or a string to an integer)
 
-## CHMED16A eMedication object
+## Medication object
 
 ### Overview of the object model
 
 The hierarchy of the object model is quite simple. Each medication object includes:
 
 ```
-1 Medication (the current medication plan)
+1 Medication (the current prescription)
   1 Patient
     n Identifiers (a number of identifiers/numbers/codes to connect the patient to IT systems)
   n Medicaments (all currently used medicaments)
@@ -84,7 +84,6 @@ The hierarchy of the object model is quite simple. Each medication object includ
 ```
 
 ### Using JSON as the object model format
-
 
 The object model format is [JSON](https://en.wikipedia.org/wiki/JSON), which was chosen for its openness, flexibility, simplicity and language independence. JSON can be implemented for most programming languages and platforms. The JSON format uses human-readable text, so patient data is clearly identifiable, making the JSON format easy to use for documentation, development and integration. 
 
@@ -121,11 +120,9 @@ classDiagram
     }
 
     class Medication {
-        -rev[0..1]: int
+        -rev[1]: int
         -Patient[1]: Patient
         -Medicaments[0..*]: Medicaments
-        -PFields[0..*]: PrivateField
-        -PSchema[0..1]: string
         -MedType[1]: int
         -Id[1]: string
         -Auth[1]: string
@@ -134,6 +131,8 @@ classDiagram
         -Rmk[0..1]: string
         -HcPerson[1]: HealthcarePerson
         -HcOrg[1]: HealthcareOrganization
+        -PSchema[0..1]: string
+        -PFields[0..*]: PrivateField
     }
 
     class Medicament {
@@ -150,7 +149,7 @@ classDiagram
 
     class Posology {
         -DtTo[0..1]: string
-        -D[0..*]: double
+        -D[0..4]: double
     }
 
     class HealthcarePerson {
@@ -179,7 +178,7 @@ classDiagram
     Medication "1" -- "1" HealthcareOrganization
     Medication "1" -- "0..*" Medicament
     Medication "1" -- "0..*" PrivateField
-    Medicament "1" -- "0..*" Posology
+    Medicament "1" -- "0..1" Posology
     Medicament "1" -- "0..*" PrivateField
 ```
 
@@ -202,13 +201,12 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>rev</td>
   <td>number</td>
   <td>2</td>
-  <td>O</td>
+  <td>R</td>
   <td>
 
-  Default: 1
-
   The [revision number](#revisions) of the specification used.
-  If no revision number is specified, it is assumed it uses revision 1.
+  If no revision number is specified, it is assumed it uses revision 1
+  (as the explicit and required revision number has been introduced in revision 2).
 
   </td>
 </tr>
@@ -243,32 +241,6 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   </td>
 </tr>
 <tr>
-  <td>PFields</td>
-  <td>
-
-  list of [Private Field](#private-field)
-
-  </td>
-  <td>1</td>
-  <td>0-N</td>
-  <td>
-
-  The list of private fields. Please refer to [Private Field](#private-field)
-
-  </td>
-</tr>
-<tr>
-  <td>PSchema</td>
-  <td>string</td>
-  <td>1</td>
-  <td>
-
-  O[^2]
-
-  </td>
-  <td>The schema of the private fields. When empty or not specified, all private fields must be ignored.</td>
-</tr>
-<tr>
   <td>MedType</td>
   <td>number</td>
   <td>1</td>
@@ -283,7 +255,13 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>string</td>
   <td>1</td>
   <td>R</td>
-  <td>The ID of the <i>Medication</i> object</td>
+  <td>
+
+  The ID of the <i>Medication</i> object
+
+  This MUST be a globally unique identifier, e.g. a UUID.
+
+  </td>
 </tr>
 <tr>
   <td>Auth</td>
@@ -301,9 +279,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   The patient can also be the author of the eMediplan. In this case, the minimum requirement is that the term
   "patient" is used to designate the author. Optionally, the patient's first name, last name and date of birth can also be specified additionally.
 
-  Note that the GLN provided in this field should also be provided
-  in [HealthcarePerson](#healthcareperson) or [HealthcareOrganization](#healthcareorganization) respectively
-  for revision 2+.
+  Note that the GLN provided in this field MUST also be provided in [HealthcarePerson](#healthcareperson) for revision 2+.
 
   </td>
 </tr>
@@ -311,7 +287,11 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>Zsr</td>
   <td>string</td>
   <td>1</td>
-  <td>O</td>
+  <td>
+
+  O[^2]
+
+  </td>
   <td>
 
   ZSR ([Zahlstellenregister](https://www.sasis.ch/de/Angebot/Produkt/ProductDetail?topMenuId=447)) number of the author or their organisation
@@ -361,6 +341,32 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   The healthcare organization in which the <i>HealthcarePerson</i> works.
 
   Please refer to [HealthcareOrganization](#healthcareorganization).
+
+  </td>
+</tr>
+<tr>
+  <td>PSchema</td>
+  <td>string</td>
+  <td>1</td>
+  <td>
+
+  O
+
+  </td>
+  <td>The schema of the private fields. When empty or not specified, all private fields must be ignored.</td>
+</tr>
+<tr>
+  <td>PFields</td>
+  <td>
+
+  list of [Private Field](#private-field)
+
+  </td>
+  <td>1</td>
+  <td>0-N</td>
+  <td>
+
+  The list of private fields. Please refer to [Private Field](#private-field)
 
   </td>
 </tr>
