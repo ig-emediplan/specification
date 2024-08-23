@@ -1570,6 +1570,10 @@ The medication plan is one of the major documents in establishing a patient's me
 
 Therefore, ["IG eMediplan"](https://emediplan.ch/) proposes a standardized paper (or PDF) document for medication plans in Switzerland. This chapter shows the requirements in terms of content and layout. In addition, the inclusion of the CHMED object as part of a 2D barcode on the form allows a technical data transfer using a paper-based format. This is a simple but practical solution that allows for user consent and data persistence using only the printed document.
 
+> [!IMPORTANT]
+> To ensure compatibility with the electronic patient record,
+> implementers MUST generate PDF documents which conform to the PDF/A specification (https://en.wikipedia.org/wiki/PDF/A).
+
 The medication plan has the following elements, arranged on an A4 paper in landscape format:
 
 - A header section using the top 30 % of the page
