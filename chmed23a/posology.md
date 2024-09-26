@@ -1524,7 +1524,7 @@ Take min 1 and max 3.
 
 ## Sequence objects
 
-*Sequence* objects can be used to specify a sequence of posologies that have to be respected in the correct order and can possibly be repeated.
+*Sequence* objects can be used to specify a sequence of posologies that have to be respected in the correct order and is repeated until the end date of the posology is reached. E.g. if the sequence is to be executed only once, it needs to be ensured that the end date is equal to the start date plus the sum of all steps in the sequence.
 
 Every sequence specifies its duration (including the unit).
 
@@ -1628,6 +1628,7 @@ Wraps any type of *PosologyDetail* object in order to create a sequence.
 #### Limitations and validations
 
 - Duration (*du*) must be greater than 0
+- `po` must not be a [Sequence](#sequence) in turn (no nested sequences are allowed).
 
 #### Examples
 
