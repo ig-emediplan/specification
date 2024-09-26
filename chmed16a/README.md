@@ -1647,7 +1647,7 @@ The identification block is located at the top left of the eMediplan and has a w
 #### Logo
 
 
-The logo can be found on the "IG eMediplan" website under *Downloads* in the chapter "Spezifikationen": [https://emediplan.ch/downloads/](https://emediplan.ch/downloads/).
+The logo can be found on the "IG eMediplan" website under *Downloads*: [https://emediplan.ch/downloads/](https://emediplan.ch/downloads/).
 
 |**Name**  |**Description** |**Characteristics** |
 | - | - | - |
