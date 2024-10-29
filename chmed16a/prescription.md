@@ -1,4 +1,4 @@
-# CHMED16A - Prescription (Revision 2)
+# CHMED16A - Prescription (Revision 3)
 
 **Contact**
 
@@ -141,7 +141,7 @@ classDiagram
         -Pos[0..1]: Posology
         -Unit[0..1]: string
         -AppInstr[0..1]: string
-        -Rep[0..1]: int
+        -RepExtended[0..1]: RepetitionObject
         -Subs[0..1]: int
         -NbPack[0..1]: double
         -PFields[0..*]: PrivateField
@@ -171,6 +171,32 @@ classDiagram
         -Email[0..1]: string
     }
 
+    class RepetitionObject {
+        -t[1]: RepetitionObjectType
+    }
+
+    class Number {
+        -v[1]: int
+    }
+
+    class Duration {
+        -d[1]: int
+        -u[1]: int
+    }
+
+    class NumberAndDuration {
+        -d[1]: int
+        -u[1]: int
+        -v[1]: int
+    }
+
+    class RepetitionObjectType {
+        <<enumeration>>
+        Number = 1
+        Duration = 2
+        NumberAndDuration = 3
+    }
+    
     Patient "1" -- "0..*" PatientId
     Patient "1" -- "0..*" PrivateField
     Medication "1" -- "1" Patient
@@ -180,6 +206,13 @@ classDiagram
     Medication "1" -- "0..*" PrivateField
     Medicament "1" -- "0..1" Posology
     Medicament "1" -- "0..*" PrivateField
+    Medicament "1" -- "0..1" RepetitionObject
+
+    RepetitionObject <|-- Number
+    RepetitionObject <|-- Duration
+    RepetitionObject <|-- NumberAndDuration
+    RepetitionObject -- RepetitionObjectType
+
 ```
 
 #### Medication (Med)
@@ -200,7 +233,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 <tr>
   <td>rev</td>
   <td>number</td>
-  <td>2</td>
+  <td>3</td>
   <td>R</td>
   <td>
 
@@ -612,11 +645,27 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>Application instructions (further information on how to apply the medication, e.g. take before meals)</td>
 </tr>
 <tr>
-  <td>Rep</td>
-  <td>number</td>
-  <td>1</td>
+  <td>RepExtended</td>
+  <td>
+
+  [RepetitionObject](#repetitionobject)
+
+  </td>
+  <td>3</td>
   <td>O</td>
-  <td>Integer which defines the number of repetitions in months, e.g. permanent prescription for 6 months</td>
+  <td>
+
+  This field replaces the previous `Rep` field (Revision 2 and prior) which was a single integer field representing the number of months the prescription is valid for.
+  To increase compatibility with older systems, it is advised to include the `Rep` field alongside the `RepExtended` field
+  if `RepExtended` is set to either `Duration` or `NumberAndDuration` and the unit (`u`) is set to month (`6`).
+
+  The repetition object indicates how often a prescription can be repeated or how long the prescription is valid.
+
+  If no repetition object is set, it will be interpreted as if the `RepetitionObject` of the type `Number` had been set with v=1.
+
+  If the prescription of a medicament is not repeatable, use the `RepetitionObject` with the type `Number` and set v=0.
+
+  </td>
 </tr>
 <tr>
   <td>Subs</td>
@@ -861,6 +910,148 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>2</td>
   <td>O</td>
   <td>E-mail address</td>
+</tr>
+</table>
+
+#### RepetitionObject
+
+The repetition object indicates how often a prescription can be repeated or how long the prescription is valid.
+
+The following table shows all *Repetition* objects with their *Repetition* object type:
+
+|**Repetition object**|**Repetition object type**|
+| :- | :- |
+|Number|1|
+|Duration|2|
+|NumberAndDuration|3|
+
+##### Number
+
+
+<table>
+<tr>
+  <th rowspan="2"><b>Name</b></th>
+  <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
+  <th><b>Usage</b></th>
+  <th rowspan="2"><b>Description</b></th>
+</tr>
+<tr>
+  <td>Rx</td>
+</tr>
+<tr>
+  <td>v</td>
+  <td>integer</td>
+  <td>3</td>
+  <td>R</td>
+  <td>
+
+  The value defining the number of repetitions; how often a prescribed medicament can be redeemed after it has been redeemed once.
+  Therefore, a maximum of `NbPack * (v + 1)` packages can be retrieved using the prescription.
+
+  If the prescription of a medicament is not repeatable set 0.
+
+  Validation: Must be greater than or equal 0.
+
+  </td>
+</tr>
+</table>
+
+##### Duration
+
+
+<table>
+<tr>
+  <th rowspan="2"><b>Name</b></th>
+  <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
+  <th><b>Usage</b></th>
+  <th rowspan="2"><b>Description</b></th>
+</tr>
+<tr>
+  <td>Rx</td>
+</tr>
+<tr>
+  <td>d</td>
+  <td>integer</td>
+  <td>3</td>
+  <td>R</td>
+  <td><p>The duration of the prescription defining in which time frame the prescription can be redeemed (permanent
+    prescription).</p>
+    <p>E.g. the prescription is repeatable within 6 months.</p>
+    <p>Validation: Must be greater than 0.</p></td>
+</tr>
+<tr>
+  <td>u</td>
+  <td>integer</td>
+  <td>3</td>
+  <td>R</td>
+  <td><p>The unit of the Duration (<i>d</i>)</p>
+    <p>Possible values:</p>
+    <p>1: Second</p>
+    <p>2: Minute</p>
+    <p>3: Hour</p>
+    <p>4: Day</p>
+    <p>5: Week</p>
+    <p>6: Month</p>
+    <p>7: Year</p></td>
+</tr>
+</table>
+
+##### NumberAndDuration
+
+
+<table>
+<tr>
+  <th rowspan="2"><b>Name</b></th>
+  <th rowspan="2"><b>Type</b></th>
+  <th rowspan="2"><b>Since revision</b></th>
+  <th><b>Usage</b></th>
+  <th rowspan="2"><b>Description</b></th>
+</tr>
+<tr>
+  <td>Rx</td>
+</tr>
+<tr>
+  <td>v</td>
+  <td>integer</td>
+  <td>3</td>
+  <td>R</td>
+  <td>
+
+  The value defining the number of repetitions; how often a prescribed medicament can be redeemed within the defined duration (`d`) after it has been redeemed once.
+  Therefore, a maximum of `NbPack * (v + 1)` packages can be retrieved using the prescription.
+
+  If the prescription of a medicament is not repeatable set 0.
+
+  Validation: Must be greater than or equal 0.
+
+  </td>
+</tr>
+<tr>
+  <td>d</td>
+  <td>Integer</td>
+  <td>3</td>
+  <td>R</td>
+  <td><p>The duration of the prescription defining in which time frame the prescription can be redeemed (permanent
+    prescription).</p>
+    <p>E.g. the prescription is repeatable within 6 months.</p>
+    <p>Validation: Must be greater than 0.</p></td>
+</tr>
+<tr>
+  <td>u</td>
+  <td>integer</td>
+  <td>3</td>
+  <td>R</td>
+  <td><p>The unit of the duration (<i>d</i>)</p>
+    <p>Possible values:</p>
+    <p>1: Second</p>
+    <p>2: Minute</p>
+    <p>3: Hour</p>
+    <p>4: Day</p>
+    <p>5: Week</p>
+    <p>6: Month</p>
+    <p>7: Year</p></td>
 </tr>
 </table>
 
