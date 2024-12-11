@@ -982,11 +982,27 @@ The table below describes the properties of a posology. Please refer to the [pos
   <td>integer</td>
   <td>O</td>
   <td>O</td>
-  <td><p>Indicates whether a medicament must be taken relative to a meal.</p>
-    <p>Possible values:</p>
-    <p>1: Before</p>
-    <p>2: During</p>
-    <p>3: After</p></td>
+  <td>
+
+  Indicates whether a medicament must be taken relative to a meal.
+
+  Possible values:
+
+  1: Before
+
+  2: During (includes also “immediately with the meal” and “at the beginning of the meal”)
+
+  3: After
+
+  4: Empty stomach
+
+  5: With a high-fat meal
+
+  6: With a light meal
+
+  7: With a main meal
+
+  </td>
 </tr>
 <tr>
   <td>unit</td>
