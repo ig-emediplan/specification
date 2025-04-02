@@ -262,7 +262,7 @@ A posology CAN contain a start and an end date for the treatment and MUST specif
 
   From date (start date of medication treatment),
 
-  format: yyyy-mm-ddThh:mm:ss+02:00 ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Combined date and time in UTC)
+  format: YYYY-MM-DDThh:mm:ss±hh:mm ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Date and time with the offset)
   (e.g. 2016-06-16T16:26:15+02:00)
 
   </td>
@@ -276,7 +276,7 @@ A posology CAN contain a start and an end date for the treatment and MUST specif
 
   To date (end date of medication treatment),
 
-  format: yyyy-mm-ddThh:mm:ss+02:00 ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Combined date and time in UTC)
+  format: YYYY-MM-DDThh:mm:ss±hh:mm ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Date and time with the offset)
   (e.g. 2016-06-16T16:26:15+02:00)
 
   The _DtTo_ must be considered as inclusive.

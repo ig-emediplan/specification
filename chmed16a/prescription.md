@@ -305,7 +305,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>R</td>
   <td>
 
-  Date of creation, Format: yyyy-mm-ddThh:mm:ss+02:00 ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Combined date and time in UTC) (e.g. 2016-01-16T16:26:15+02:00)
+  Date of creation, Format: YYYY-MM-DDThh:mm:ss±hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date and time with the offset) (e.g. 2016-06-16T16:26:15+02:00)
 
   </td>
 </tr>
@@ -406,7 +406,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>R</td>
   <td>
 
-  Date of birth, Format: yyyy-mm-dd ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date)
+  Date of birth, Format: YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date)
 
   </td>
 </tr>
@@ -670,7 +670,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>
 
   To date (end date of medication treatment),
-  Format: yyyy-mm-dd ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date).
+  Format: YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date).
   The _DtTo_ must be considered as inclusive. For example DtTo: 2015-05-01, the patient must apply the medicament also on 2015-05-01.
 
   </td>

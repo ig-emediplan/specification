@@ -369,8 +369,8 @@ The *Medication* object is the main object; it contains exactly one *Patient* an
 
   The date of creation
 
-  Format: yyyy-mm-ddThh:mm:ss+02:00
-  ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Combined date and time in UTC)
+  Format: YYYY-MM-DDThh:mm:ss±hh:mm
+  ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Date and time with the offset)
   (e.g. 2016-06-16T16:26:15+02:00)
  
   </td>
@@ -420,7 +420,7 @@ The *Patient* object contains the patient's personal and health data.
   <td>R</td>
   <td>
 
-  Date of birth, format: yyyy-mm-dd ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Date)
+  Date of birth, format: YYYY-MM-DD ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Date)
 
   </td>
 </tr>
@@ -639,7 +639,7 @@ The MedicalData object contains the patient's health data.
 
   Only required in case of <i>Risk Id</i> 78 in <i>RiskCategory</i> 3
 
-  First day of last menstruation, format: yyyy-mm-dd ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Date)
+  First day of last menstruation, format: YYYY-MM-DD ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Date)
 
   </td>
 </tr>
@@ -939,7 +939,7 @@ The table below describes the properties of a posology. Please refer to the [pos
 
   From date (start date of medication treatment),
 
-  format: YYYY-MM-DDThh:mm:ss+02:00 or YYYY-MM-DD
+  format: YYYY-MM-DDThh:mm:ss±hh:mm or YYYY-MM-DD
   ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Combined date and time including time zone or date only)
   (e.g. 2016-06-16T16:26:15+02:00)
 
@@ -953,7 +953,7 @@ The table below describes the properties of a posology. Please refer to the [pos
   <td>
   To date (end date of medication treatment),
 
-  format: YYYY-MM-DDThh:mm:ss+02:00 or YYYY-MM-DD
+  format: YYYY-MM-DDThh:mm:ss±hh:mm or YYYY-MM-DD
   ([ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) Combined date and time including time zone or date only)
   (e.g. 2016-06-16T16:26:15+02:00)
 
