@@ -189,17 +189,17 @@ Below the identification block and above the medication block, the date and time
 
 The medication block is located below the header (identification block, patient block, service provider block and 2D barcode). Between these areas the medication block should maintain a distance of about 0.5 cm. Arial 8.5 pt is recommended as the font and font size.
 
-The medication block is vertically arranged in columns or horizontally in medication rows and has a width of about 28 cm. The height depends on the number of medication rows. Approximately 15 medicaments can be listed on a single page, depending on their column height. If a second page is required, the column title should also be shown on the following page. It is allowed to provide column surfaces with a light grey background colour. Additionally the medication block must be framed.
-The height and width of the columns are defined by the content.
+The medication block is vertically arranged in columns or horizontally in medication rows and has a width of about 28 cm. The height depends on the number of medication rows. Approximately 15 medicaments can be listed on a single page, depending on their column height. If a second page is required, the column title should also be shown on the following page. It is allowed to provide column surfaces with a light gray background color. Additionally, the medication block must be framed.
+The content defines the height and width of the columns.
 
 For medicaments with zero posologies, all columns except **Medication**, **Reason** and **Prescribed by** are empty.
 For medicaments with multiple posologies, a separate row per posology is created which duplicates the data from the [Medicament](./README.md#medicament) itself.
 
 Amounts in the posology are stored as floating point numbers.
-To enhance the readability of the printed version, the creature should do
-a replacement of certain special case fractions, if the original number is within 0.001 of the value of the fraction: ½, 1/3, ¼, 2/3, ¾, 1/8
+To enhance the readability of the printed version, 
+special case fractions should be replaced if the original number is within 0.001 of the fraction: ½, 1/3, ¼, 2/3, ¾, 1/8
 
-E.g. `0.333` should be displayed as `1/3`, whereas `0.331` should displayed as-is.
+E.g. `0.333` should be displayed as `1/3`, whereas `0.331` should be displayed as-is.
 
 |**Name**  |**Description** |**Characteristics** |**CHMED23A** |**Field** |
 | - | - | - | - | - |
@@ -230,43 +230,41 @@ The footer is composed of the following parts: on the left-hand side the patient
 | - | - | - | - | - |
 |**-** |Footer |Arial 8.5 pt Page 1 of n |||
 
-## Posology details in text form
+## Posology Details in Text Form
 
-This section describes how more complicated examples of [PosologyDetail objects](#posologydetail-objects) can be displayed in the printed version by converting them to text.
-The rendering output described here is in German as it is the biggest audience but the same principals can be used for other languages as well.
+This section describes how more complicated examples of [PosologyDetail objects](./posology.md#posologydetail-objects) can be displayed in the printed version by converting them to text.
+
+The following specification should serve as an example but is not normative.
+Consequently, this part of the specification may change without notice if changes turn out to be necessary.
+
+The prescriber **must** always be able to validate the generated text before sending an eMediplan.
+
+Because of the many possible permutations, the IG eMediplan cannot currently validate the conformity of implementations.
+
+The rendering output described here is in German as it is the biggest audience, but the same principals can be used for other languages as well.
 
 ### Notation
 
-For each type there is a render instruction, i.e. a description on how to turn the JSON object into a text.
+For each type there is a render instruction, i.e., a description on how to turn the JSON object into a text.
 In the instruction, the properties of the type are referred to by their name.
-Additionally, there is some contextual information which is necessary in some cases.
+Sometimes, the `posology` is referenced directly as it is required for the `unit`, which is only defined there.
 
-- `posology`: This refers to the top-level posology object which is currently being rendered.
-  This is e.g. necessary because the `unit` is defined on that level and not repeated for dosage instructions.
-- `isTopLevelPosologyDetail`: `SequenceObject` allows nesting other `PosologyDetail` within itself.
-  The rendering can depend on this since it changes the scope, e.g. for repetitions of instructions.
-- `hasValue(x)`: This is a pseudo-code function which allows different behavior depending on if `x` has a value or not.
-
-The syntax used for the render instructions is loosely based on [Handlebars](https://handlebarsjs.com/).
+The syntax used for the render instructions is loosely based on [Handlebars](https://handlebarsjs.com/). 
+Some details, e.g., capitalization in cases where a word ends up on the beginning of a line
+or duplicated spaces because of conditions may be left out for the readability of this document.
 
 #### Markup
 
-In some cases the rendering contains additional markup like lists or boldness.
+Boldness is used for sequence posologies to denote steps.
 These should be used if the output format supports it and otherwise be left out.
 
 These are the notations used for markup:
 
 ```markdown
 Render bold text:
-**Bold text**
+**Example Bold text**
 If markup is not supported, use the plain text instead without the surrounding `**`:
-Bold text
-
-Render bullet point list:
-- list
-- with
-- items
-Use the same text output as used in the example.
+Example Bold text
 ```
 
 ### Special case: Daily
@@ -281,7 +279,7 @@ and is widely supported by service providers as well.
 #### Daily
 
 ```
-Morgen: {{ds[0]}} {{posology.unit}}, Mittag: {{ds[1]}} {{posology.unit}}, Abend: {{ds[2]}} {{posology.unit}}, zur Nacht: {{ds[3]}} {{posology.unit}}
+Morgen: {{ds[0]}} {{posology.unit}}, Mittag: {{ds[1]}} {{posology.unit}}, Abend: {{ds[2]}} {{posology.unit}}, Nacht: {{ds[3]}} {{posology.unit}}
 ```
 
 #### FreeText
@@ -293,28 +291,38 @@ Morgen: {{ds[0]}} {{posology.unit}}, Mittag: {{ds[1]}} {{posology.unit}}, Abend:
 #### Single
 
 ```
-{{renderTimedDosage tdo isNestedTimedDosage=false}}
+{{renderTimedDosage tdo}}
 ```
 
 #### Cyclic
 
 ```
-Folgende Angabe {{#if tdpc == 1}}einmalig{{else}}{{tdpc}} mal{{/if}} im Zeitraum von {{renderTimeUnit timeUnit=cyDuU amount=cyDu isDative=true}} ausführen, {{#if hasValue(posology.dtTo) && isTopLevelPosologyDetail}}wiederholen bis zum Enddatum:{{else}}danach wiederholen:{{/if}}
-{{renderTimedDosage tdo isSubInstruction=true}}
+{{#if tdpc == 1}}Einmalig{{else}}{{tdpc}} mal über {{renderTimeUnit timeUnit=cyDuU amount=cyDu}}{{/if}}
+{{renderTimedDosage tdo}}
 ```
+
+##### Cyclic Special Casing
+
+Inspired by feedback and the [NHS guidelines for narrative text](https://developer.nhs.uk/apis/dose-syntax-implementation/dosage-to-narrative-logic.html),
+special casing exists if the `cyDu` (cycle duration) is singular (`{{#if cyDu == 1}}`):
+
+```
+{{#if tdpc > 1}}{{tdpc}} mal {{/if}}{{renderTimeUnit timeUnit=cyDuU amount=every}} 
+{{renderTimedDosage tdo}}
+```
+
+[See below](#timeunit) for the values returned by `renderTimeUnit`.
 
 #### Sequence
 
-The subsequent steps are rendered with an empty line in-between.
-Trailing empty lines should be removed.
+Steps are rendered with an empty line in-between:
 
 ```
-Folgende Schritte nacheinander ausführen und {{#if hasValue(posology.dtTo)}}wiederholen bis zum Enddatum:{{else}}danach wiederholen:{{/if}}
-
 {{#each sos}}
 {{renderSequenceObject this number=(@index + 1)}}
 
 {{/each}}
+Anschliessend {{#if posology.dtTo}}bis zum Enddatum{{/if}} von Vorne beginnen
 ```
 
 ### Render instructions: SequenceObject
@@ -327,25 +335,22 @@ which denotes the current step of the sequence (1-based index).
 Note that `po` can never be another Sequence.
 
 ```
-**Schritt {{number}}, während {{renderTimeUnit timeUnit=duU amount=du isDative=true}}:**
+**{{#if number > 1}}Dann{{/if}} {{renderTimeUnit timeUnit=duU amount=du}} lang:**
 {{renderPosologyDetail po}}
 ```
 
 #### Pause
 
 ```
-**Schritt {{number}}, pausieren für {{renderTimeUnit timeUnit=duU amount=du isDative=false}}**
+**{{#if number > 1}}Dann{{/if}} {{renderTimeUnit timeUnit=duU amount=du}} pausieren:**
 ```
 
 ### Render instructions: TimedDosage
 
-TimedDosage receives an additional context parameter `isSubInstruction`
-which allows it to improve the visual connection between related instructions.
-
 #### DosageOnly
 
 ```
-{{#if isSubInstruction}}- {{/if}}{{renderDosage do}}
+{{renderDosage do}}
 ```
 
 #### Times
@@ -355,7 +360,7 @@ E.g. use `23:00` instead of `23:00:00` but do print the seconds e.g. in `23:14:5
 
 ```
 {{#each ts}}
-{{#if isSubInstruction || ts.length > 1}}- {{/if}}Um {{dt}} Uhr: {{renderDosage do}}
+um {{dt}} Uhr {{renderDosage do}}{{#unless @last}} und {{/unless}}
 {{/each}}
 ```
 
@@ -363,7 +368,7 @@ E.g. use `23:00` instead of `23:00:00` but do print the seconds e.g. in `23:14:5
 
 ```
 {{#each ss}}
-{{#if isSubInstruction || ss.length > 1}}- {{/if}}{{renderDaySegment s}}: {{renderDosage do}}
+{{renderDaySegment s}} {{renderDosage do}}{{#unless @last}}. {{/unless}}
 {{/each}}
 ```
 
@@ -372,7 +377,7 @@ E.g. use `23:00` instead of `23:00:00` but do print the seconds e.g. in `23:14:5
 The weekdays are concatenated using `, `, for the last item in the instruction below this suffix needs to be removed.
 
 ```
-{{#if isSubInstruction}}- An{{else}}Gemäss folgender Angabe an{{/if}} folgenden Wochentagen: {{#each wds}}{{renderWeekDay this}}, {{/each}}
+Am {{#each wds}}{{renderWeekDay this}}{{#unless @last}} und {{/unless}}{{/each}}
 {{renderTimedDosage tdo isSubInstruction=true}}
 ```
 
@@ -381,15 +386,14 @@ The weekdays are concatenated using `, `, for the last item in the instruction b
 The days are concatenated using `, `, for the last item in the instruction below this suffix needs to be removed.
 
 ```
-{{#if isSubInstruction}}- An{{else}}Gemäss folgender Angabe an{{/if}} folgenden Tagen im Monat: {{#each doms}}{{this}}., {{/each}}
+{{#each doms}}Am {{this}}. des Monats{{#unless @last}} und {{/unless}}{{/each}}
 {{renderTimedDosage tdo isSubInstruction=true}}
 ```
 
 #### Interval
 
 ```
-Gemäss folgender Angabe maximal alle {{renderTimeUnit timeUnit=miDuU amount=miDu isDative=false}}:
-- {{renderDosage do}}
+Höchstens alle {{renderTimeUnit timeUnit=miDuU amount=miDu}} {{renderDosage do}}
 ```
 
 ### Render instructions: Dosage
@@ -403,13 +407,13 @@ Gemäss folgender Angabe maximal alle {{renderTimeUnit timeUnit=miDuU amount=miD
 #### DosageFromTo
 
 ```
-Linearer Verlauf von {{aFrom}} zu {{aTo}} {{posology.unit}} über einen Zeitraum von {{renderTimeUnit timeUnit=duU amount=du isDative=true}}
+Linearer Verlauf von {{aFrom}} zu {{aTo}} {{posology.unit}} über {{renderTimeUnit timeUnit=duU amount=du}}
 ```
 
 #### DosageRange
 
 ```
-Mindestens {{aMin}} {{posology.unit}} maximal {{aMax}} {{posology.unit}}
+Mindestens {{aMin}} {{posology.unit}}, maximal {{aMax}} {{posology.unit}}
 ```
 
 ### Render instructions: Value sets
@@ -443,42 +447,51 @@ TimeUnit is always rendered combined with an `amount`:
 ```
 
 The `amount` also decides whether the singular (amount == 1) or plural version of the word is used.
-This renderer accepts an additional context parameter named `isDative` which is necessary to use the correct declension of the word in German.
-Other languages might need additional context parameters.
+
+A special case is defined as `Every` for cylic dosages.
 
 The `{{timeUnit}}` expression above is determined by the following list:
 
 - Second:
   - Singular: `Sekunde`
   - Plural: `Sekunden`
+  - Every: `Sekündlich`
 - Minute:
   - Singular: `Minute`
   - Plural: `Minuten`
+  - Every: `Minütlich`
 - Hour:
   - Singular: `Stunde`
-  - Plural: `Stunden`
+  - Plural: `Stunden`,
+  - Every: `Stündlich`
 - Day:
   - Singular: `Tag`
-  - Plural: `Tage`
-    - Dative: `Tagen`
+  - Plural: `Tage`,
+  - Every: `Täglich`
 - Week:
   - Singular: `Woche`
   - Plural: `Wochen`
+  - Every: `Wöchentlich`
 - Month:
   - Singular: `Monat`
   - Plural: `Monate`
-    - Dative: `Monaten`
+  - Every: `Monatlich`
 - Year:
   - Singular: `Jahr`
   - Plural: `Jahre`
-    - Dative: `Jahren`
+  - Every: `Jährlich`
 
 ### Render instructions: Unit
 
 Wherever `{{posology.unit}}` is rendered, it should not display the `code` but
-instead the display value for that code which can be found in the [terminology](./terminology.md#unit).
+instead the display value for that code which can be found in the [terminology](./terminology.md#unit). Depending
+on the cardinality, the word must be rendered in the plural form.
 
 ### Examples
+
+The following examples should cover the different permutations that are possible
+using the posology object, but they are not yet exhaustive and may not make complete sense
+from a pharmaceutical standpoint.
 
 #### Example 1
 
@@ -504,15 +517,14 @@ Posology:
     }
   },
   "inRes": false,
-  "unit": "Stk"
+  "unit": "tablet"
 }
 ```
 
 Rendered output:
 
 ```
-Folgende Angabe einmalig im Zeitraum von 1 Tag ausführen, danach wiederholen:
-- Um 09:00 Uhr: 1 Stück
+Täglich um 09:00 Uhr 1 Tablette
 ```
 
 #### Example 2
@@ -544,8 +556,7 @@ Posology:
 Rendered output:
 
 ```
-Folgende Angabe 3 mal im Zeitraum von 1 Tag ausführen, danach wiederholen:
-- 1 Applikation
+3 mal täglich 1 Applikation
 ```
 
 #### Example 3
@@ -608,19 +619,18 @@ Posology:
 
 Rendered output:
 
-
 ```
-Folgende Schritte nacheinander ausführen und wiederholen bis zum Enddatum:
-
-**Schritt 1, während 2 Tagen:**
+**2 Tage lang**:
 Morgen: 0 Stück, Mittag: 0 Stück, Abend: ½ Stück, Nacht: 0 Stück
 
-**Schritt 2, pausieren für 1 Tag**
+**Anschliessend 1 Tag pausieren**
 
-**Schritt 3, während 3 Tagen:**
+**Anschliessend 3 Tage lang:**
 Morgen: 0 Stück, Mittag: 0 Stück, Abend: ¾ Stück, Nacht: 0 Stück
 
-**Schritt 4, pausieren für 1 Tag**
+**Anschliessend 1 Tag pausieren**
+
+Anschliessend bis zum Enddatum von Vorne beginnen
 ```
 
 #### Example 4
@@ -658,9 +668,7 @@ Posology:
 Rendered output:
 
 ```
-Folgende Angabe einmalig im Zeitraum von 1 Monat ausführen, danach wiederholen:
-- An folgenden Tagen im Monat: 10.
-- Mindestens 10 Tropfen, maximal 20 Tropfen
+Monatlich am 10. des Monats mindestens 10 Tropfen, maximal 20 Tropfen
 ```
 
 #### Example 5
@@ -694,9 +702,7 @@ Posology:
 Rendered output:
 
 ```
-Folgende Angabe 4 mal im Zeitraum von 1 Tag ausführen, danach wiederholen:
-Gemäss folgender Angabe maximal alle 6 Stunden:
-- 1 Stück
+4 mal täglich höchstens alle 6 Stunden 1 Stück
 ```
 
 #### Example 6
@@ -726,7 +732,7 @@ Posology:
 Rendered output:
 
 ```
-Linearer Verlauf von 2 zu 28 Milliliter über einen Zeitraum von 15 Minuten
+Linearer Verlauf von 2 zu 28 Milliliter über 15 Minuten
 ```
 
 #### Example 7
@@ -772,9 +778,7 @@ Posology:
 Rendered output:
 
 ```
-Folgende Angabe einmalig im Zeitraum von 1 Tag ausführen, danach wiederholen:
-- Am Morgen: Mindestens 1 Stück, maximal 2 Stück
-- Am Abend: Mindestens 1 Stück, maximal 2 Stück
+Täglich Morgens mindestens 1 Stück, maximal 2 Stück. Abends mindestens 1 Stück, maximal 2 Stück
 ```
 
 #### Example 8
@@ -823,11 +827,59 @@ Posology:
 Rendered output:
 
 ```
-Folgende Schritte nacheinander ausführen und danach wiederholen:
+21 Tage lang:
+Täglich um 09:00 Uhr 1 Stück
 
-**Schritt 1, während 21 Tagen:**
-Folgende Angabe einmalig im Zeitraum von 1 Tag ausführen, danach wiederholen:
-- Um 09:00 Uhr: 1 Stück
+Anschliessend 7 Tage pausieren
 
-**Schritt 2, pausieren für 7 Tage**
+Anschliessend von Vorne beginnen
+```
+
+#### Example 9
+
+Posology:
+
+```json
+{
+  "dtFrom": "2023-11-12",
+  "po": {
+    "t": 4,
+    "cyDuU": 5,
+    "cyDu": 2,
+    "tdo": {
+      "t": 4,
+      "wds": [
+        1
+      ],
+      "tdo": {
+        "t": 2,
+        "ts": [
+          {
+            "dt": "20:00:00",
+            "do": {
+              "t": 1,
+              "a": 1
+            }
+          },
+          {
+            "dt": "22:00:00",
+            "do": {
+              "t": 1,
+              "a": 2
+            }
+          }
+        ]
+      }
+    },
+    "tdpc": 2
+  },
+  "inRes": false,
+  "unit": "Stk"
+}
+```
+
+Rendered output:
+
+```
+2 mal über 2 Wochen am Montag um 20:00 Uhr 1 Tablette und um 22:00 Uhr 2 Tabletten
 ```
