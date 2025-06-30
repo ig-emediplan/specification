@@ -124,7 +124,7 @@ Code system for unit codes
 | `%` | Prozent | pour cent |
 | `Appl` | Applikation | Application |
 | `Blist` | Blister | blister |
-| `Bq` | Becquerel | Becquerel" |
+| `Bq` | Becquerel | Becquerel |
 | `Btl` | Beutel | sachet |
 | `Dos` | Dosis | dose |
 | `Dosierpip` | Dosierpipette | pipette graduée |
@@ -158,7 +158,7 @@ Code system for unit codes
 | `ng` | Nanogramm | nanogramme |
 | `nML` | Messlöffel | cuillère graduée |
 | `Patr` | Patrone | cartouche |
-| `Pck` | Packung | emballage"   |
+| `Pck` | Packung | emballage  |
 | `Pfl` | Pflaster | patch |
 | `Stk` | Stück | pièce |
 | `tablet` | Tablette | Comprimé |
