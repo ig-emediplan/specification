@@ -1548,7 +1548,7 @@ the version needs to be transferred in another way.
 
 ### In software: the shared libraries
 
-The ["IG eMediplan" website](https://emediplan.ch/downloads/) provides a free DLL that can be used in Windows-based software projects. In addition, the full source code of the library (written in C#) is available on request. This software speeds up the mapping from a customer implementation to the JSON object. Just include it in your software project and then add it as a reference (Ch.Emediplan.ChMed16A).
+The ["IG eMediplan" website](https://www.emediplan.ch/softwareanbieter#listen-download) provides a free DLL that can be used in Windows-based software projects. In addition, the full source code of the library (written in C#) is available on request. This software speeds up the mapping from a customer implementation to the JSON object. Just include it in your software project and then add it as a reference (Ch.Emediplan.ChMed16A).
 
 #### How to deserialize an existing CHMED string
 

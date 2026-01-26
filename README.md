@@ -4,8 +4,8 @@ For details regarding the organization, please refer to the website: https://eme
 
 The aim of this repository is to be the home of specifications created
 and maintained by the IG eMediplan. 
-Some specifications have been published as PDF as well on the [website](https://emediplan.ch/downloads/).
-These versions are superseded by the specifications in this repository.
+Some specifications were earlier published as PDF on the website.
+Those versions are superseded by the specifications in this repository.
 For historical purposes, they are included in the [legacy](./legacy) folder.
 
 ## Versions
@@ -34,7 +34,7 @@ It uses the following states a specification can be in:
 | Version | State | Use |
 | --- | --- | --- |
 | [CHMED16A](./chmed16a) | Stable | System implementers should aim to be able to read this version as it is widely used. For generating new medication plans, CHMED23A should be used instead. |
-| [CHMED20AF](https://chmed20af.emediplan.ch/fhir/) | Stable | This a FHIR version which defines the mapping from CHMED16A to FHIR. It is a superset of [CH EMED](https://fhir.ch/ig/ch-emed/index.html) which enables interoperability with the electronic patient record. |
+| [CHMED20AF](https://github.com/ahdis/chmed) | Stable | This a FHIR version which defines the mapping from CHMED16A to FHIR. It is a superset of [CH EMED](https://fhir.ch/ig/ch-emed/index.html) which enables interoperability with the electronic patient record. |
 | [CHMED23A](./chmed23a) | Ready for adoption | System implementers should use this version for both reading and creating medication plans JSON documents (the QR code). Note that certain parts of the specification are not available yet (e.g. physical layout). |
 
 ## Backwards compatibility
@@ -64,7 +64,7 @@ feel free to open a PR to fix it.
 
 | Version | Environment / Language | Author | Maintainer | Notes |
 | --- | --- | --- | --- | --- | 
-| CHMED16A | .NET / C# | HCI Solutions AG | - | Only the DLL has been published, see https://emediplan.ch/downloads/ |
+| CHMED16A | .NET / C# | HCI Solutions AG | - | Only the DLL has been published, see https://www.emediplan.ch/softwareanbieter#listen-download |
 | CHMED23A | .NET / C# | HCI Solutions AG | - | [Source Code](./chmed23a/client-implementations/dotnet) |
 
 If you have implemented a client library in a certain language
