@@ -1,4 +1,4 @@
-# CHMED16A - Prescription (Revision 2)
+# CHMED16A - Prescription (Revision 3)
 
 **Contact**
 
@@ -34,6 +34,8 @@ This document is the content and layout specification for the electronic documen
 
 This allows IT systems to store and transmit electronic medication plans as simple strings or text files in UTF-8. It also makes it possible to transmit the medication in a print-based form by using 2D barcodes. Therefore, the medication plan is readable by users and systems alike. This is necessary to guarantee a simple handling. 
 
+This specification is implemented by [E-Rezept Schweiz](https://developers.e-rezept.ch/erezept/).
+
 ### Revisions
 
 The object model contains an attribute `rev` (short for revision) on the root level (medication object).
@@ -67,6 +69,27 @@ On the other hand, it cannot
 - Change the type of a field to either a broader version or an incompatible one
   (e.g. change a URL to a string or a string to an integer)
 
+### Changelog
+
+#### Revision 3 (April 2026)
+
+- Add optional field `Medicament.IndC`
+  [FOPH mandates](https://www.bag.admin.ch/dam/de/sd-web/PtwrsnPGN-1j/Rundschreiben%20des%20BAG%20zur%20%C3%9Cbermittlung%20des%20Indikationscode%20vom%2019.%20Februar%202026.pdf) an indiation code for medications from the [SL](https://sl.bag.admin.ch/sl) with limitations.
+- Define types more strictly
+
+## Types
+
+The following types are defined:
+
+- `int` – an integer
+- `double` – a floating point value
+- `string`
+- `uuid` string with length of 36, as defined by [RFC 4122](https://datatracker.ietf.org/doc/html/rfc4122)
+- `date` - string with format `YYYY-MM-DD` ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date) (e.g., 2016-06-16)
+- `date-time` - string with format `YYYY-MM-DDThh:mm:ss±hh:mm` ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date and time with the offset) (e.g., 2016-06-16T16:26:15+02:00)
+
+A maximum length may be defined with brackets, e.g.: `string(36)` or `int(2)`
+
 ## Medication object
 
 ### Overview of the object model
@@ -96,10 +119,10 @@ classDiagram
     class Patient {
         -FName[1]: string
         -LName[1]: string
-        -BDt[1]: string
+        -BDt[1]: date
         -Gender[0..1]: int
         -Street[0..1]: string
-        -Zip[0..1]: string
+        -Zip[0..1]: string(10)
         -City[0..1]: string
         -Phone[0..1]: string
         -Email[0..1]: string
@@ -124,10 +147,10 @@ classDiagram
         -Patient[1]: Patient
         -Medicaments[0..*]: Medicaments
         -MedType[1]: int
-        -Id[1]: string
+        -Id[1]: uuid
         -Auth[1]: string
-        -Zsr[0..1]: string
-        -Dt[1]: string
+        -Zsr[0..1]: string(7)
+        -Dt[1]: date-time
         -Rmk[0..1]: string
         -HcPerson[1]: HealthcarePerson
         -HcOrg[1]: HealthcareOrganization
@@ -141,19 +164,20 @@ classDiagram
         -Pos[0..1]: Posology
         -Unit[0..1]: string
         -AppInstr[0..1]: string
-        -Rep[0..1]: int
+        -Rep[0..1]: int(2)
         -Subs[0..1]: int
-        -NbPack[0..1]: double
+        -NbPack[0..1]: int(10)
         -PFields[0..*]: PrivateField
+        -IndC[0..1]: string()
     }
 
     class Posology {
-        -DtTo[0..1]: string
+        -DtTo[0..1]: date
         -D[0..4]: double
     }
 
     class HealthcarePerson {
-        -Gln[1]: string
+        -Gln[1]: string(13)
         -FName[1]: string
         -LName[1]: string
         -Zsr[0..1]: string
@@ -163,7 +187,7 @@ classDiagram
         -Name[1]: string
         -NameAffix[0..1]: string
         -Street[1]: string
-        -Zip[1]: string
+        -Zip[1]: string(10)
         -City[1]: string
         -Country[0..1]: string
         -Zsr[0..1]: string
@@ -199,7 +223,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>rev</td>
-  <td>number</td>
+  <td>int</td>
   <td>2</td>
   <td>R</td>
   <td>
@@ -242,7 +266,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>MedType</td>
-  <td>number</td>
+  <td>int</td>
   <td>1</td>
   <td>R</td>
   <td>
@@ -252,29 +276,24 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Id</td>
-  <td>string</td>
+  <td>uuid</td>
   <td>1</td>
   <td>R</td>
   <td>
 
   The ID of the <i>Medication</i> object
-
-  This MUST be a globally unique identifier, e.g. a UUID.
-
   </td>
 </tr>
 <tr>
   <td>Auth</td>
-  <td>string</td>
+  <td>string(13)</td>
   <td>1</td>
   <td>R</td>
   <td>
 
-  Author (GLN[^3] if available, otherwise name)
+  Author
 
-  eMediplan: GLN of a person or organisation
-
-  ePrescription: GLN of a person
+  For prescription: GLN[^2] of a person 
 
   The patient can also be the author of the eMediplan. In this case, the minimum requirement is that the term
   "patient" is used to designate the author. Optionally, the patient's first name, last name and date of birth can also be specified additionally.
@@ -285,7 +304,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Zsr</td>
-  <td>string</td>
+  <td>string(7)</td>
   <td>1</td>
   <td>
 
@@ -300,12 +319,12 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Dt</td>
-  <td>string</td>
+  <td>date-time</td>
   <td>1</td>
   <td>R</td>
   <td>
 
-  Date of creation, Format: YYYY-MM-DDThh:mm:ss±hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date and time with the offset) (e.g. 2016-06-16T16:26:15+02:00)
+  Date of creation 
 
   </td>
 </tr>
@@ -401,18 +420,18 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>BDt</td>
-  <td>string</td>
+  <td>date</td>
   <td>1</td>
   <td>R</td>
   <td>
 
-  Date of birth, Format: YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date)
+  Date of birth
 
   </td>
 </tr>
 <tr>
   <td>Gender</td>
-  <td>number</td>
+  <td>int(1)</td>
   <td>1</td>
   <td>O</td>
   <td>
@@ -436,7 +455,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Zip</td>
-  <td>string</td>
+  <td>string(10)</td>
   <td>1</td>
   <td>O</td>
   <td>Zip code</td>
@@ -464,7 +483,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Rcv</td>
-  <td>string</td>
+  <td>string(13)</td>
   <td>1</td>
   <td>O</td>
   <td>Receiver (GLN) of the electronic prescription. To be used if the electronic prescription is to be transmitted
@@ -519,7 +538,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Type</td>
-  <td>number</td>
+  <td>int</td>
   <td>1</td>
   <td>R</td>
   <td>
@@ -567,7 +586,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>IdType</td>
-  <td>number</td>
+  <td>int(1)</td>
   <td>1</td>
   <td>R</td>
   <td><p>The type of the <i>Id</i>. Possible values:</p><p>1: None </p>
@@ -613,21 +632,21 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Rep</td>
-  <td>number</td>
+  <td>int(2)</td>
   <td>1</td>
   <td>O</td>
   <td>Integer which defines the number of repetitions in months, e.g. permanent prescription for 6 months</td>
 </tr>
 <tr>
   <td>Subs</td>
-  <td>number</td>
+  <td>int(1)</td>
   <td>1</td>
   <td>O</td>
   <td>1 if medicament should not be substituted, 0 otherwise. Default: 0</td>
 </tr>
 <tr>
   <td>NbPack</td>
-  <td>number</td>
+  <td>int(10)</td>
   <td>1</td>
   <td>O</td>
   <td>Number of packages to be delivered. Default: 1</td>
@@ -644,6 +663,17 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
   <td>
 
   The list of private fields. Please refer to [Private Fields](#private-field)
+
+  </td>
+</tr>
+<tr>
+  <td>IndC</td>
+  <td>string(8)</td>
+  <td>3</td>
+  <td>O</td>
+  <td>
+
+  Indication code in the format `00000.00` as defined by the SL (https://sl.bag.admin.ch/sl)
 
   </td>
 </tr>
@@ -664,20 +694,19 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>DtTo</td>
-  <td>string</td>
+  <td>date</td>
   <td>1</td>
   <td>O</td>
   <td>
 
   To date (end date of medication treatment),
-  Format: YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) Date).
   The _DtTo_ must be considered as inclusive. For example DtTo: 2015-05-01, the patient must apply the medicament also on 2015-05-01.
 
   </td>
 </tr>
 <tr>
   <td>D</td>
-  <td>list of number</td>
+  <td>list of double</td>
   <td>1</td>
   <td>0-4</td>
   <td>
@@ -744,7 +773,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Gln</td>
-  <td>string</td>
+  <td>string(13)</td>
   <td>2</td>
   <td>R</td>
   <td>The GLN</td>
@@ -765,7 +794,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Zsr</td>
-  <td>string</td>
+  <td>string(7)</td>
   <td>2</td>
   <td>O</td>
   <td><p>ZSR number</p>
@@ -810,7 +839,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Zip</td>
-  <td>string</td>
+  <td>string(10)</td>
   <td>2</td>
   <td>R</td>
   <td>Postcode</td>
@@ -824,7 +853,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Country</td>
-  <td>string</td>
+  <td>string(2)</td>
   <td>2</td>
   <td>O</td>
   <td>
@@ -841,7 +870,7 @@ The *Med* object is the main one; it contains exactly one *Patient* object and a
 </tr>
 <tr>
   <td>Zsr</td>
-  <td>string</td>
+  <td>string(7)</td>
   <td>2</td>
   <td>O</td>
   <td><p>ZSR number</p>
