@@ -30,12 +30,13 @@ It uses the following states a specification can be in:
 - Stable: This version has seen enough adoption in the industry
   and has not had big changes in a while to be considered stable.
   Changes are not expected and should always be backwards compatible.
+- Deprecated: The version should not be used. eMediplan no longer provides support or maintenance for it.
 
-| Version | State | Use |
-| --- | --- | --- |
-| [CHMED16A](./chmed16a) | Stable | System implementers should aim to be able to read this version as it is widely used. For generating new medication plans, CHMED23A should be used instead. |
-| [CHMED20AF](https://github.com/ahdis/chmed) | Stable | This a FHIR version which defines the mapping from CHMED16A to FHIR. It is a superset of [CH EMED](https://fhir.ch/ig/ch-emed/index.html) which enables interoperability with the electronic patient record. |
-| [CHMED23A](./chmed23a) | Ready for adoption | System implementers should use this version for both reading and creating medication plans JSON documents (the QR code). Note that certain parts of the specification are not available yet (e.g. physical layout). |
+| Version                                     | State      | Use                                                                                                                                                                                                          |
+|---------------------------------------------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [CHMED16A](./chmed16a)                      | Stable     | The only relevant and widely used version.                                                                                                                                                                   |
+| [CHMED20AF](https://github.com/ahdis/chmed) | Stable     | This a FHIR version which defines the mapping from CHMED16A to FHIR. It is a superset of [CH EMED](https://fhir.ch/ig/ch-emed/index.html) which enables interoperability with the electronic patient record. |
+| [CHMED23A](./chmed23a)                      | Deprecated | Development has been stopped, effectively withdrawing this version. See [eMediplan Homepage](https://www.emediplan.ch/aktuelles/strategische-ausrichtung-der-ig-emediplan-2026).                             |
 
 ## Backwards compatibility
 
