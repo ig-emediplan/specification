@@ -1783,8 +1783,7 @@ The fields are translated into the following languages:
 - Portuguese
 - Serbian
 
-The  translations  can  be  found  on  the  "IG  eMediplan"  website  under  *Downloads*  in  the  chapter "Spezifikationen": [https://emediplan.ch/downloads/](https://emediplan.ch/downloads/)
-
+The  translations  can  be  found  on  the  "IG  eMediplan"  website: https://www.emediplan.ch/s/eMediplan_Translations.xlsx
 
 [^1]: R: Required
 [^2]: O: Optional
